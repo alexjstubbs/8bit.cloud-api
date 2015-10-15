@@ -9,7 +9,9 @@ var r 	    	= require('rethinkdb'),
  	chalk   	= require('chalk'),
 	config  	= require('../config.json'),
 	databases   = require('./databases.json'),
-	methods 	= require('../methods'); 
+	schemas 	= require('../schemas').Schemas,
+	validate 	= require('jsonschema').validate,
+	methods 	= require('../methods');
 
 // Set up databases and tables
 function setUp(callback) {
@@ -34,22 +36,35 @@ function setUp(callback) {
 	});
 }
 
-// Insert Default Ignition Use ("admin" but with no special privladges)
-function insertDefaultUser(callback) {
-	methods.user.createAdmin(function(err, result) {
+	var user = {
+		username 	: {config:"username"},
+		password 	: config.password,
+		email 		: config.email
+	}
+
+// Insert Default Ignition User (Admin type. Auto added to friends of new users)
+function createDefaultUser(callback) {
+	methods.user.create(config, function(err, result) {
 		callback(err, result);
 	})
 }
 
 // Call Set Up Function
 setUp(function(err, result) {
-	if (err) {
-		console.log(chalk.bgRed.bold('[ERROR]:') + " " + err); 
-	}
 
-	else {
-		console.log(chalk.bgGreen.bold('[SUCCESS]:') + " " + "Successfully set up datastore"); 
-	}
+	console.log(validate(user, schemas.User));
+// validate(user, schemas.User).schema.properties.hello.default
+
+	// if (err) {
+	// 	console.log(chalk.bgRed.bold('[ERROR]:') + " " + err); 
+	// }
+
+	// else {
+	// 	createDefaultUser(function(err, result) {
+	// 		if (err) { console.log(err) }
+	// 		else { console.log(chalk.bgGreen.bold('[SUCCESS]:') + " " + "Successfully set up datastore"); }
+	// 	});
+	// }
 
 	process.exit();
 })

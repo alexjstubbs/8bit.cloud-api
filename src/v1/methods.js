@@ -2,7 +2,7 @@
  * Methods
  */
 
- var methods = {
+var methods = {
         user  : require('./methods/user.js')
 };
 
