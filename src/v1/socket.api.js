@@ -4,7 +4,8 @@
 var token       = require('./token'),
     methods     = require('./methods'),
     socketioJwt = require('socketio-jwt'),
-    gateKeeper  = require('./gateKeeper');
+    gateKeeper  = require('./gateKeeper'),
+    config      = require('./config.json');
 
 
 var userConnection = function() {
@@ -17,7 +18,7 @@ var userConnection = function() {
   -------------------------------------------------- */
   nsp.use(socketioJwt.authorize({
 
-      secret: 'digdug',
+      secret: config.secret,
       handshake: true
 
   }));

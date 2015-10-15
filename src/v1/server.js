@@ -25,6 +25,7 @@ var http                = require('http')
 ,   needle              = require('needle')
 ,   errors              = require('./errors').error
 ,   fs                  = require('fs')
+,   config              = require('./config.json')
 ,   User
 ,   newToken;
 
@@ -54,7 +55,7 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(session({ secret: 'digdug' })); // session secret
+app.use(session({ secret: config.secret })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
