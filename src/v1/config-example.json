@@ -1,5 +1,9 @@
 {
-	"address" : "localhost",
-	"port"	  : "32770",
-	"secret"  : "secretkey"
+	"address"  : "localhost",
+	"port"	   : "32770",
+	"secret"   : "secretKey",
+	"user"	   : "Admin",
+	"passwrod" : "pass123",
+	"IGDBUrl"  : "https://www.igdb.com/api/v1",
+	"IGDBKey"  : "Enter your IGDB Api Key"
 }

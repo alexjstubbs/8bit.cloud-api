@@ -1,0 +1,24 @@
+{
+	"databases": {
+		"ignition": {
+			"tables": 
+			[
+				"users",
+				"activity",
+				"messages",
+				"events",
+				"community"
+			]
+		},
+		"games": {
+			"tables": 
+			[
+				"games",
+				"companies",
+				"people",
+				"franchises",
+				"platforms"
+			]
+		}
+	}
+}
