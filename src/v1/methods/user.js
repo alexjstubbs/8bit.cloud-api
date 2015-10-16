@@ -2,35 +2,31 @@
  * User API Methods
  */ 
 
-var r 			= require('rethinkdb'),
-	_ 			= require('lodash'),
+var _ 			= require('lodash'),
 	bcrypt  	= require('bcrypt'),
-	schemas 	= require('../schemas').Schemas,
-	validate 	= require('jsonschema').validate,
 	methods 	= require('../methods.js');
 
 /*
  * create
  * 
- * @param: conn (connection instance) 
- * @param: userObj (object) 
- * @param: callback (function)
+ * @param: r        : RethinkDB connection Object (connection object) 
+ * @param: userObj  : The serialized user Object  (object) 
  * 
  */
 
-function create(conn, userObj, callback) {
+function create(r, userObj) {
 
-	var validation = validate(userObj, schemas.User),
-		schema 	   = validation.schema.properties;
+	return new Promise(function(resolve, reject) {
 
+		console.log(methods.validation.schemaValidation(userObj, User))
 
-	if (validation.errors.length) {
-		console.log(validation);
-	}
+		resolve();
 
-	else {
+	});
 
-		console.log("ca", validation.instance);
+	// else {
+		// validation.schema.properties
+		// console.log("ca", validation.instance);
 
 		// userObj.password = bcrypt.hashSync(userObj.password, 10); // Hash Password
 
@@ -54,7 +50,7 @@ function create(conn, userObj, callback) {
 		// 		 console.log("wtf", err, result);
 		// 		 err ? callback(err) : callback(result);
 		// 	});
-		}
+		// }
 }
 
 /* Exports

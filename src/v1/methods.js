@@ -3,7 +3,8 @@
  */
 
 var methods = {
-        user  : require('./methods/user.js')
+        user       : require('./methods/user.js'),
+        validation : require('./methods/validation.js'),
 };
 
 /*  Exports
