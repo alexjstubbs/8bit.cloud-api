@@ -41,39 +41,41 @@ function makeDatabases() {
 
 // Make Database Tables (databases.json)
 function makeTables(tables) {
-    console.log(tables);
     return Promise.all(tables.map(function (table, c) {
         for (var i = 0; i < table.length; i++) {
-            console.log("insert into", Object.keys(databases)[c], "this:", table[i]);
-
             r.db(Object.keys(databases)[c]).tableCreate(table[i]).run(connection, function(err, conn) { if (err) { reject(err) }}) 
         }         
-        return table
+        return table;
     }));
 }
 
 // Init Entry Function
 function init() {
 
-    connectDatabase().then(function(conn) {
-        return makeDatabases();
-    }).then(function(tables) {
-        return makeTables(tables);
-    }).then(function() {
-        // return createDefaultUser();
-    }).then(function() {
-        // r.getPoolMaster().drain();
-        // process.exit();
+    // connectDatabase().then(function(conn) {
+    //     return makeDatabases();
+    // }).then(function(tables) {
+    //     return makeTables(tables);
+    // }).then(function() {
+    //     return createDefaultUser();
+    // }).then(function() {
+    //     // process.exit();
+    // }).catch(function(e) {
+    //     console.log("error:", e);
+    //     // process.exit();
+    // });
+    
+    connectDatabase()
+    .then(function(connection) {
+        return createDefaultUser(connection)
     }).catch(function(e) {
         console.log("error:", e);
         // process.exit();
     });
-
-
 }
 
 // Insert Default Ignition User
-function createDefaultUser() {
+function createDefaultUser(connection) {
 
     var user = {
         username    : config.username,
@@ -81,7 +83,8 @@ function createDefaultUser() {
         email       : config.email
     }
 
-    methods.user.create(r, user)
+    return methods.user.create(connection, user);
+
 }
 
 // Call Set Up Function
