@@ -15,8 +15,8 @@ var config      = require('../config.json'),
 
 // Connect to datastore
 function connectDatabase() {
-    return new Promise(function (resolve, reject) {
-        r.connect({ host: config.address, port: config.port }, function(err, conn) {
+    return new Promise((resolve, reject) => {
+        r.connect({ host: config.address, port: config.port }, (err, conn) => {
             if (err) { reject(err) }
             else { 
                 connection = conn;
@@ -28,22 +28,22 @@ function connectDatabase() {
 
 // Make Initial Databases (databases.json)
 function makeDatabases() {
-    return Promise.all(_.keysIn(databases).map(function (db) {
+    return Promise.all(_.keysIn(databases).map((db) => {
     
-        r.dbCreate(db).run(connection, function(err, conn) { if (err) { reject(err) }}) 
+        r.dbCreate(db).run(connection, (err, conn) => { if (err) { reject(err) }}) 
 
         return databases[db].tables;
     
-    })).then(function(array){
+    })).then((array) => {
         return array;
     });
 }
 
 // Make Database Tables (databases.json)
 function makeTables(tables) {
-    return Promise.all(tables.map(function (table, c) {
+    return Promise.all(tables.map((table, c) => {
         for (var i = 0; i < table.length; i++) {
-            r.db(Object.keys(databases)[c]).tableCreate(table[i]).run(connection, function(err, conn) { if (err) { reject(err) }}) 
+            r.db(Object.keys(databases)[c]).tableCreate(table[i]).run(connection, (err, conn) => { if (err) { reject(err) }}) 
         }         
         return table;
     }));
@@ -68,9 +68,14 @@ function init() {
     connectDatabase()
     .then(function(connection) {
         return createDefaultUser(connection)
-    }).catch(function(e) {
-        console.log("error:", e);
-        // process.exit();
+    })
+    .then((results) => { 
+        console.log(results);
+        process.exit();
+    })
+    .catch((error) => {
+        console.log("error:", error);
+        process.exit();
     });
 }
 
@@ -78,7 +83,7 @@ function init() {
 function createDefaultUser(connection) {
 
     var user = {
-        username    : config.username,
+        id          : config.username,
         password    : config.password,
         email       : config.email
     }
