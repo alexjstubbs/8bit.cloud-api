@@ -79,9 +79,9 @@ function init() {
     // });
     
     connectDatabase()
-    
+
     .then(function(connection) {
-        return createDefaultUser(connection)
+        return methods.user.get(connection, "Alex")
     })
     
     .then((results) => { 
