@@ -1,3 +1,5 @@
+"use strict";
+
 /* 
  * JSON Schema Validation and Conditionals
  */
@@ -12,10 +14,11 @@ var Schemas = {
 
 		id						: "User",
 	    type					: "object",
-	    required				: ["username", "password", "email"],
+	    required				: ["id", "password", "email"],
 	    
 	    properties: {
-			username: {
+			id: {
+				msg 			: "signup_error",
 				type			: "string",
 				minLength 		: "2",
 				maxLength 		: "15",

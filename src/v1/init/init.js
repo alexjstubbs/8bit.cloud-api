@@ -52,31 +52,54 @@ function makeTables(tables) {
 // Init Entry Function
 function init() {
 
-    // connectDatabase().then(function(conn) {
+    // connectDatabase()
+
+    // .then((conn) => {
     //     return makeDatabases();
-    // }).then(function(tables) {
+    // })
+
+    // .then((tables) => {
     //     return makeTables(tables);
-    // }).then(function() {
+    // })
+
+    // .then(() => {
     //     return createDefaultUser();
-    // }).then(function() {
-    //     // process.exit();
-    // }).catch(function(e) {
+    // })
+
+    // .then(() => {
+    //     process.exit();
+    // })
+
+    // .catch(function(e) {
     //     console.log("error:", e);
-    //     // process.exit();
+    // })
+
+    // .then(() => {
+    //     process.exit();
     // });
     
     connectDatabase()
+    
     .then(function(connection) {
         return createDefaultUser(connection)
     })
+    
     .then((results) => { 
-        console.log(results);
+        console.log("results:", results);
+    })
+
+    .then(() => {
         process.exit();
     })
+
     .catch((error) => {
-        console.log("error:", error);
+        console.log("creation error:", error);
+    })
+
+    .then(() => {
         process.exit();
     });
+
 }
 
 // Insert Default Ignition User

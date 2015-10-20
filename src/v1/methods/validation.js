@@ -1,9 +1,12 @@
+"use strict";
+
 /*
- * Validation Functions and Methods
+ * Validation related Functions and Methods
  */
 
 var bcrypt  	= require('bcrypt'),
 	Promise     = require("bluebird"),
+	errors 		= require("./errors"),
 	schemas 	= require('../schemas').Schemas,
 	validate 	= require('jsonschema').validate;
 
@@ -15,22 +18,36 @@ var bcrypt  	= require('bcrypt'),
  * 
  */
 
-function schemaValidation(obj, schema) {
+function schema(obj, schema) {
 
 	return new Promise(function(resolve, reject) {
 
 		var validation = validate(obj, schemas[schema]);
 
 		if (validation.errors.length) { 
-			reject(validation); 
+
+			 return Promise.all(validation.errors.map(function (error) {
+
+			 	return errors.error(error.schema.msg, stack);
+			 	
+		    })).then(function(array) {
+				reject(array); 
+		    });
+
 		}
 		
 		else { 
+
 			resolve(validation); 
+		
 		}
 		
 	});
 }
 
+
+/*  Exports
+-------------------------------------------------- */
+exports.schema = schema;
 
 	

@@ -1,17 +1,40 @@
-/* Return Server Errors (REST/Socket)
--------------------------------------------------- */
+"use strict";
 
-/* Return Error to User, WebSockets or HTTP
--------------------------------------------------- */
-var error = function(id) {
+/*
+ * Error Methods
+ */
 
-	return { error: errorList[id] };
+/*
+ * error
+ * 
+ * @param: id 	  : ID of Error in Reference to errorList 			 (string) 
+ * @param: stack  : A String Representation of Possible Error Stack  (optional, string) 
+ * 
+ */
 
+var error = function(id, stack) {
+	if (errorList.hasOwnProperty(id)) { 
+			return errorList[id]; 
+	}
+	else { 
+		let errorMsg = errorList["general_error"];
+		errorMsg.stack = stack;
+		return errorMsg; 
+	}
 }
 
-/* Error List
--------------------------------------------------- */
+/*
+ * errorList
+ */
+ 
 var errorList = {
+
+	general_error: {
+	 "type:": 	"error",
+	 "id":      "general_error",
+	 "message": "Something has gone wrong. Contact support@ignition.io if this message persists.",
+	 "url":     "https://docs.ignition.io/troubleshooting"
+	},
 
 	rate_limit: {
 	  "type:": 	 "error",
@@ -37,7 +60,7 @@ var errorList = {
 	signup_error: {
 	  "type:": 	 "error",
 	  "id":      "signup_error",
-	  "message": "Could not create your new profile. A general error was returned. Contact support@ignition.io if this message persists.",
+	  "message": "Could not create your new profile. Contact support@ignition.io if this message persists.",
 	  "url":     "https://docs.ignition.io/signup-error"
 	},
 
@@ -125,7 +148,7 @@ var errorList = {
 	  "url":     "https://docs.ignition.io/wrong-token"
 	},
 
-	wrong_passowrd: {
+	wrong_password: {
 	  "type:": 	 "error",
 	  "id":      "wrong_passowrd",
 	  "message": "Your password does not match. You can reset your password.",

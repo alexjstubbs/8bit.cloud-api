@@ -1,22 +1,33 @@
-/* Return Server Messages (REST/Socket)
--------------------------------------------------- */
+"use strict";
 
-/* Return Message to User, WebSockets or HTTP
--------------------------------------------------- */
+/*
+ * Results Methods
+ */
+
+/*
+ * result
+ * 
+ * @param: id      : ID of Result in Reference to ResultList          (string) 
+ * @param: object  : A String Representation of Possible Error Stack  (object) 
+ * 
+ */
+
 var result = function(id, object) {
 
     return { result: resultList[id], object: object };
 
 }
 
-/* Message List
--------------------------------------------------- */
+/*
+ * resultList
+ */
+
 var resultList = {
 
     new_message: {
       "type:": 	 "message",
       "id":      "new_message",
-      "message": "Your have a new message!"
+      "message": "You have a new message!"
      },
 
     message_sent: {
@@ -49,5 +60,5 @@ var resultList = {
 
 /* Exports
 -------------------------------------------------- */
-exports.result 		= result;
+exports.result 		  = result;
 exports.resultList 	= resultList;

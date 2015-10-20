@@ -1,57 +1,82 @@
+"use strict";
+
 /* 
  * User API Methods
  */ 
 
-var _ 			= require('lodash'),
+var r 	    	= require('rethinkdb'),
+	_ 			= require('lodash'),
 	bcrypt  	= require('bcrypt'),
-	methods 	= require('../methods.js');
+	validation 	= require('./validation.js'),
+	runDiff 	= require('./runDiff.js'),
+	runQuery 	= require('./runQuery.js');
 
 /*
  * create
  * 
- * @param: r        : RethinkDB connection Object (connection object) 
- * @param: userObj  : The serialized user Object  (object) 
+ * @param: connection : RethinkDB connection Object (connection object) 
+ * @param: userObj    : The serialized user Object  (object) 
  * 
  */
 
-function create(r, userObj) {
 
-	return new Promise(function(resolve, reject) {
+function create(connection, userObj) {
 
-		console.log(methods.validation.schemaValidation(userObj, User))
+	// Promise Chain
+	return new Promise(function(resolve, reject) { 
 
-		resolve();
+		validation.schema(userObj, 'User')
+		
+		.then(function(schemaInstance) {
+			return runDiff(userObj, schemaInstance);
+		})
+
+		.then(function(userObj) {
+			return hashPassword(userObj);
+		})
+
+		.then(function(userObj) {
+			return buildUserQuery(userObj);
+		})
+
+		.then(function(userObj) {
+			resolve(runQuery(connection, userObj));
+		})
+
+		.catch(function(e) {
+			reject(e);
+		});
 
 	});
 
-	// else {
-		// validation.schema.properties
-		// console.log("ca", validation.instance);
+	// Hash Password for Storage
+	function hashPassword(userObj) {
+		return new Promise((resolve, reject) => {
+			userObj.password = bcrypt.hashSync(userObj.password, 10);
+			resolve(userObj);
+		});
+	}
 
-		// userObj.password = bcrypt.hashSync(userObj.password, 10); // Hash Password
+	// Build Unique User Method Query
+	function buildUserQuery(userObj) {
+		return new Promise((resolve, reject) => {
+			resolve(
+				r.db("ignition")
+				.table("users")
+				.filter({email: userObj.email}).coerceTo('array')
+				.do((results) => {
+			        return r.branch(results.count().gt(0),
+			        	r.error("email_taken"),
+						r.db("ignition").table("users").insert(userObj, { conflict: 'error' })
+			        )
+				})
+			)
+		})
+	}
 
-		// r.db("ignition").table("users").insert({
-
-		// 	// TODO: Loop through properties of validates object.
-				
-		// 		username 	: userObj.username, 			// Username
-		// 		password 	: userObj.password, 			// Password
-		// 		email 		: userObj.email,    			// E-mail Address
-		// 		avatar 		: r.js("userObj.avatar ? userObj.avatar : schema.avatar.default"),   			// Avatar
-		// 		token 		: r.js("userObj.token ? schema.token.default"),    			// JSON Web Token
-		// 		messages 	: {},               			// Messages
-		// 		lastseen 	: r.js("userObj.lastseen ? schema.lastseen.default"),          			// Last Seen Date
-		// 		ip 			: r.js("userObj.ip ? schema.ip.default"),       			// User IP
-		// 		activities  : [],               			// Activities
-		// 		friends 	: {},               			// Friends ID's
-		// 		online 		: true        // Online Status
-
-		// 	}).run(conn, function(err, result) {
-		// 		 console.log("wtf", err, result);
-		// 		 err ? callback(err) : callback(result);
-		// 	});
-		// }
 }
+
+
 
 /* Exports
 -------------------------------------------------- */
