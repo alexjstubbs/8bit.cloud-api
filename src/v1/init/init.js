@@ -81,7 +81,8 @@ function init() {
     connectDatabase()
 
     .then(function(connection) {
-        return methods.user.get(connection, "Alex")
+        // return createDefaultUser(connection)
+        return methods.friends.add(connection, "Alex", "Alex")
     })
     
     .then((results) => { 
