@@ -14,37 +14,38 @@ var r           = require('rethinkdb'),
 /*
  * create
  * 
+ * description: Creates a User
+ *
  * @param: connection : RethinkDB connection Object (connection object) 
  * @param: userObj    : The serialized user Object  (object) 
  * 
  */
 
-
 function create(connection, userObj) {
 
     // Promise Chain
-    return new Promise(function(resolve, reject) { 
+    return new Promise((resolve, reject) => { 
 
         validation.schema(userObj, 'User')
         
-        .then(function(schemaInstance) {
+        .then((schemaInstance) => {
             return runDiff(userObj, schemaInstance);
         })
 
-        .then(function(userObj) {
+        .then((userObj) => {
             return hashPassword(userObj);
         })
 
-        .then(function(userObj) {
-            return buildUserQuery(userObj);
+        .then((userObj) => {
+            return buildQuery(userObj);
         })
 
-        .then(function(userObj) {
-            resolve(runQuery(connection, userObj));
+        .then((query) => {
+            resolve(runQuery(connection, query));
         })
 
-        .catch(function(e) {
-            reject(e);
+        .catch((error) => {
+            reject(error);
         });
 
     });
@@ -57,17 +58,63 @@ function create(connection, userObj) {
         });
     }
 
-    // Build Unique User Method Query
-    function buildUserQuery(userObj) {
+    // Build Unique Query
+    function buildQuery(userObj) {
         return new Promise((resolve, reject) => {
             resolve(
-                r.db("ignition")
-                .table("users")
+                r.db('ignition')
+                .table('users')
                 .filter({email: userObj.email}).coerceTo('array')
                 .do((results) => {
-                    return r.branch(results.count().gt(0),
-                        r.error("email_taken"),
-                        r.db("ignition").table("users").insert(userObj, { conflict: 'error' })
+                    return r.branch(results.count().lt(1),
+                        r.db('ignition').table('users').insert(userObj, { conflict: 'error' }),
+                        r.error('email_taken')
+                    )
+                })
+            )
+        })
+    }
+
+}
+
+/*
+ * get
+ * 
+ * description: Returns a User
+ *
+ * @param: connection : RethinkDB connection Object (connection object) 
+ * @param: username   : The username / ID           (string) 
+ * 
+ */
+
+function get(connection, username) {
+    
+    // Promise Chain
+    return new Promise(function(resolve, reject) { 
+
+        buildQuery(username)
+       
+        .then((query) => {
+            resolve(runQuery(connection, query));
+        })
+
+        .catch(function(error) {
+            reject(error);
+        });
+
+    });
+
+    // Build Unique Query
+    function buildQuery(username) {
+        return new Promise((resolve, reject) => {
+            resolve(
+                r.db('ignition')
+                .table('users')
+                .get(username)
+                .do((results) => {
+                    return r.branch(results,
+                        results.pluck('id', 'activities', 'online', 'ip', 'lastseen', 'avatar', 'friends'),
+                        r.error('no_such_user')
                     )
                 })
             )
@@ -77,7 +124,7 @@ function create(connection, userObj) {
 }
 
 
-
 /* Exports
 -------------------------------------------------- */
 exports.create = create;
+exports.get    = get;

@@ -1,107 +1,147 @@
-/* 
- * API server for Ignition Clients
- * V1.1
+'use strict';
+
+/*
+ * 
+ * API Server for Ignition Clients
+ *
  */
 
+var methods     = require('./methods'),
+    api         = require('./api'),
+    compress    = require('koa-compress'),
+    json        = require('koa-json'),
+    logger      = require('koa-logger'),
+    serve       = require('koa-static'),
+    route       = require('koa-route'),
+    koa         = require('koa'),
+    path        = require('path'),
+    app         = module.exports = koa();
 
-var http                = require('http')
-,   https               = require('https')
-,   express             = require('express')
-,   r                   = require('rethinkdb')
-,   app                 = express()
-,   server              = require('http').Server(app)
-,   _                   = require('lodash')
-,   bodyParser          = require('body-parser')
-,   cookieParser        = require('cookie-parser')
-,   session             = require('express-session')
-,   morgan              = require('morgan')
-,   methodOverride      = require('method-override')
-,   passport            = require('passport')
-,   LocalStrategy       = require('passport-local').Strategy
-,   socketioJwt         = require("socketio-jwt")
-,   token               = require('./token')
-,   sockets             = require('./socket.api')
-,   bcrypt              = require('bcrypt')
-,   needle              = require('needle')
-,   errors              = require('./errors').error
-,   fs                  = require('fs')
-,   config              = require('./config.json')
-,   User
-,   newToken;
+// Logger
+app.use(logger());
 
-// Sockets
-global.__io             = require('socket.io')(server);
-global.__sio            = __io.listen(6052);
+// Serve static files
+app.use(serve(path.join(__dirname, 'public')));
 
-// Global Error Handler
-process.on('uncaughtException', function (err) {
-  console.log(err.stack);
+// Compress
+app.use(compress());
+
+// Pretty Json
+app.use(json());
+
+if (!module.parent) {
+  app.listen(1983);
+  console.log('listening on port 1983');
+}
+
+// Error Handling
+app.on('error', function(err){
+  log.error('server error', err);
 });
 
-// Accept User Connections
-sockets.userConnection();
-
-/* App and Server
--------------------------------------------------- */
-
-var app = express();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(methodOverride());
-
-app.use(morgan('dev')); // log every request to the console
-app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser.json()); // get information from html forms
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(session({ secret: config.secret })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+// Routing 
+app.use(route.get('/friends/:id', api.friends));
 
 
-/* Local Auth Strategy
--------------------------------------------------- */
 
-passport.serializeUser(function(user, done) {
-    console.log("Issued new token to: " +user.Username)
-    done(null, user._id);
-});
+// var http                = require('http')
+// ,   https               = require('https')
+// ,   express             = require('express')
+// ,   r                   = require('rethinkdb')
+// ,   app                 = express()
+// ,   server              = require('http').Server(app)
+// ,   _                   = require('lodash')
+// ,   bodyParser          = require('body-parser')
+// ,   cookieParser        = require('cookie-parser')
+// ,   session             = require('express-session')
+// ,   morgan              = require('morgan')
+// ,   methodOverride      = require('method-override')
+// ,   passport            = require('passport')
+// ,   LocalStrategy       = require('passport-local').Strategy
+// ,   socketioJwt         = require("socketio-jwt")
+// ,   token               = require('./token')
+// ,   sockets             = require('./socket.api')
+// ,   bcrypt              = require('bcrypt')
+// ,   needle              = require('needle')
+// ,   errors              = require('./errors').error
+// ,   fs                  = require('fs')
+// ,   config              = require('./config.json')
+// ,   User
+// ,   newToken;
 
-// used to deserialize the user
-passport.deserializeUser(function(id, done) {
-    __models.User.findById(id, function(err, user) {
-        done(err, user);
-    });
-});
+// // Sockets
+// global.__io             = require('socket.io')(server);
+// global.__sio            = __io.listen(6052);
 
-passport.use('local', new LocalStrategy({
+// // Global Error Handler
+// process.on('uncaughtException', function (err) {
+//   console.log(err.stack);
+// });
 
-    usernameField: 'Username',
-    passwordField: 'validPassword',
+// // Accept User Connections
+// sockets.userConnection();
 
-    },
+// /* App and Server
+// -------------------------------------------------- */
 
-  function(username, password, done) {
+// var app = express();
 
-        r.db("ignition").table("Users").filter({Usernames: username}).run(conn, function(err, user) {
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(methodOverride());
+
+// app.use(morgan('dev')); // log every request to the console
+// app.use(cookieParser()); // read cookies (needed for auth)
+// app.use(bodyParser.json()); // get information from html forms
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// app.use(session({ secret: config.secret })); // session secret
+// app.use(passport.initialize());
+// app.use(passport.session()); // persistent login sessions
+// app.use(flash()); // use connect-flash for flash messages stored in session
+
+
+// /* Local Auth Strategy
+// -------------------------------------------------- */
+
+// passport.serializeUser(function(user, done) {
+//     console.log("Issued new token to: " +user.Username)
+//     done(null, user._id);
+// });
+
+// // used to deserialize the user
+// passport.deserializeUser(function(id, done) {
+//     __models.User.findById(id, function(err, user) {
+//         done(err, user);
+//     });
+// });
+
+// passport.use('local', new LocalStrategy({
+
+//     usernameField: 'Username',
+//     passwordField: 'validPassword',
+
+//     },
+
+//   function(username, password, done) {
+
+//         r.db("ignition").table("Users").filter({Usernames: username}).run(conn, function(err, user) {
             
-            if (err) { return done(err); }
+//             if (err) { return done(err); }
             
-            console.log("user," user);
+//             console.log("user," user);
 
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
-            }
+//             if (!user) {
+//                 return done(null, false, { message: 'Incorrect username.' });
+//             }
 
-            if (!bcrypt.compareSync(password, user.validPassword)) {
-                return done(null, false, { message: 'Incorrect password.' });
-            }
+//             if (!bcrypt.compareSync(password, user.validPassword)) {
+//                 return done(null, false, { message: 'Incorrect password.' });
+//             }
 
-            return done(null, user);
+//             return done(null, user);
 
-        });
-    }
-));
+//         });
+//     }
+// ));
 

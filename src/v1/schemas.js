@@ -73,7 +73,8 @@ var Schemas = {
                 oneOf: [ 
                     { type      : "object" },
                     { type      : "null" },
-                ]
+                ],
+                default         : [],
             },
             online: {
                 oneOf: [ 

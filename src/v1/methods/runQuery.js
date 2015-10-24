@@ -7,7 +7,7 @@ var _        = require('lodash'),
 /*
  * runQuery
  * 
- * Description: Runs a given RDB query, returns results or unique error
+ * description: Runs a given RDB query, returns results or unique error
  *
  * @param: connection : RethinkDB connection Object (connection object) 
  * @param: query      : The query Object            (object) 
@@ -27,7 +27,7 @@ module.exports = (connection, query) => {
 
             else {
 
-                // Cursor
+                // Cursor (return as array)
                 if (result.toArray) {
                     resolve(result.toArray());
                 }

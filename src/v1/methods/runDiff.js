@@ -5,7 +5,7 @@ var _ = require('lodash');
 /*
  * runDiff
  * 
- * Description: Runs a diff on an Object for against defined Schema
+ * Description: Runs a diff on an Object against defined Schema
  *
  * @param: obj            : the Object to run against Schema (object) 
  * @param: schemaInstance : the Schema to be diff'd against  (object) 

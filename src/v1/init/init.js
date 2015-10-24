@@ -7,7 +7,6 @@
 var config      = require('../config.json'),
     r           = require('rethinkdb'),
     _           = require('lodash'),
-    chalk       = require('chalk'),
     databases   = require('./databases.json').databases,
     Promise     = require("bluebird"),
     methods     = require('../methods'),
@@ -82,7 +81,7 @@ function init() {
 
     .then(function(connection) {
         // return createDefaultUser(connection)
-        return methods.friends.add(connection, "Alex", "Alex")
+        return methods.friends.remove(connection, "Alex", "Alex")
     })
     
     .then((results) => { 
