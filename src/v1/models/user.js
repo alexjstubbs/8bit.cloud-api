@@ -1,15 +1,16 @@
 "use strict";
 
 /* 
- * User API Methods
+ * User API Models
  */ 
 
 var r           = require('rethinkdb'),
     _           = require('lodash'),
     bcrypt      = require('bcrypt'),
-    validation  = require('./validation.js'),
-    runDiff     = require('./runDiff.js'),
-    runQuery    = require('./runQuery.js');
+    validation  = require('./validation'),
+    runDiff     = require('./runDiff'),
+    token       = require('../token'),
+    runQuery    = require('./runQuery');
 
 /*
  * create
@@ -124,7 +125,92 @@ function get(connection, username) {
 }
 
 
+/*
+ * update
+ * 
+ * description: Update various objects in User record
+ *
+ * @param: connection : RethinkDB connection Object (connection object) 
+ * @param: username   : The username / ID           (string) 
+ * @param: record     : Object document to update   (object)
+ *
+ */
+
+function update(connection, username, record) {
+    
+    // Promise Chain
+    return new Promise(function(resolve, reject) { 
+
+        buildQuery(username, record)
+       
+        .then((query) => {
+            resolve(runQuery(connection, query));
+        })
+
+        .catch(function(error) {
+            reject(error);
+        });
+
+    });
+
+    // Build Unique Query
+    function buildQuery(username, record) {
+        return new Promise((resolve, reject) => {
+            resolve(
+                r.db('ignition')
+                .table('users')
+                .get(username)
+                .do((results) => {
+                    return r.branch(results,
+                        results.update(record),
+                        r.error('database_error')
+                    )
+                })
+            )
+        })
+    }
+
+}
+
+/* 
+ * issueToken
+ * 
+ * description: Issues JSON Web Token for Session
+ *
+ * @param: connection : RethinkDB connection Object (connection object) 
+ * @param: username   : The username / ID           (string) 
+ * 
+ */
+
+function issueToken(connection, username) {
+
+    // Promise Chain
+    return new Promise(function(resolve, reject) { 
+
+        createToken(username)
+       
+        .then((token) => {
+            resolve({token: token});
+        })
+
+        .catch(function(error) {
+            reject(error);
+        });
+
+    });
+
+    function createToken(username) {
+        return new Promise((resolve, reject) => {
+             resolve(token.issueToken({id: username}));
+        })
+    }
+
+}
+
+
 /* Exports
 -------------------------------------------------- */
-exports.create = create;
-exports.get    = get;
+exports.create     = create;
+exports.get        = get;
+exports.update     = update;
+exports.issueToken = issueToken;

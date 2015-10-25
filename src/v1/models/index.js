@@ -2,12 +2,12 @@
  * Methods
  */
 
-var methods = {
+var models = {
         validation : require('./validation.js'),
         user       : require('./user.js'),
-        friends    : require('./friends.js')
+        friends    : require('./friends.js'),
 };
 
 /*  Exports
 -------------------------------------------------- */
-module.exports = methods;
+module.exports = models;

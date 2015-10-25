@@ -1,37 +1,54 @@
 'use strict';
 
 /*
- * 
- * API Server for Ignition Clients
+ * Ignition API Server
  *
+ * Apache License 2.0 (Apache-2.0)
+ * Copyright (c) Alexander Stubbs, ignition.io. All Rights Reserved.
+ * 
+ * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-var methods     = require('./methods'),
-    api         = require('./api'),
+GLOBAL.$io      = require('socket.io')(server);
+GLOBAL.$sio     = $io.listen(6052);
+
+var config      = require('./config.json'),
+    models      = require('./models'),
+    api         = require('./controllers'),
+    sockets     = require('./controllers/sockets'),
+    db          = require('./models/db'),
     compress    = require('koa-compress'),
     json        = require('koa-json'),
     logger      = require('koa-logger'),
     serve       = require('koa-static'),
-    route       = require('koa-route'),
+    Router      = require('koa-router'),
     koa         = require('koa'),
     path        = require('path'),
-    app         = module.exports = koa();
+    Promise     = require("bluebird"),
+    app         = module.exports = koa(),
+    server      = require('http').createServer(app.callback());
 
-// Logger
-app.use(logger());
+    app.name    = "Ignition API Server";
+    app.env     = "Development";
+    app.version = "v1";
 
-// Serve static files
-app.use(serve(path.join(__dirname, 'public')));
 
-// Compress
-app.use(compress());
+var router = new Router({
+  prefix: `/api/${app.version}`
+});
 
-// Pretty Json
-app.use(json());
+// Middleware Modules
+app
+    .use(router.routes())
+    .use(router.allowedMethods())
+    .use(logger())
+    .use(compress())
+    .use(json());
+
 
 if (!module.parent) {
-  app.listen(1983);
-  console.log('listening on port 1983');
+  app.listen(3000);
+  console.log('listening on port 3000');
 }
 
 // Error Handling
@@ -39,8 +56,46 @@ app.on('error', function(err){
   log.error('server error', err);
 });
 
-// Routing 
-app.use(route.get('/friends/:id', api.friends));
+process.on('uncaughtException', function (err) {
+  console.log(err.stack);
+});
+
+// Routing
+
+router.get('/friends/:id', 
+
+    function *(next) {
+        let self = this;
+        yield api.endpoint('friends', 'get', self);
+    }
+
+);
+
+
+router.get('/user/token/issue/:id', 
+
+    function *(next) {
+        let self = this;
+        yield api.endpoint('user', 'issueToken', self);
+    }
+
+);
+
+
+// router
+//   .get('/api/v1/friends/:id', function *(next) {
+//     this.type = 'application/json';
+//     this.body = yield models.friends.get(connection, this.params.id);
+//   })
+//   .post('/users', function *(next) {
+//     // ...
+//   })
+//   .put('/users/:id', function *(next) {
+//     // ...
+//   })
+//   .del('/users/:id', function *(next) {
+//     // ...
+//   });
 
 
 

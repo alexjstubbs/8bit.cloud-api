@@ -9,7 +9,7 @@ var config      = require('../config.json'),
     _           = require('lodash'),
     databases   = require('./databases.json').databases,
     Promise     = require("bluebird"),
-    methods     = require('../methods'),
+    models     = require('../models'),
     connection;
 
 // Connect to datastore
@@ -81,7 +81,7 @@ function init() {
 
     .then(function(connection) {
         // return createDefaultUser(connection)
-        return methods.friends.remove(connection, "Alex", "Alex")
+        return models.friends.remove(connection, "Alex", "Alex")
     })
     
     .then((results) => { 
@@ -111,7 +111,7 @@ function createDefaultUser(connection) {
         email       : config.email
     }
 
-    return methods.user.create(connection, user);
+    return models.user.create(connection, user);
 
 }
 

@@ -1,7 +1,7 @@
 "use strict";
 
 /* 
- * Friends API Methods
+ * Friends API Models
  */ 
 
 var r           = require('rethinkdb'),

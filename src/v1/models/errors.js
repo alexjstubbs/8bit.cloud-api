@@ -144,7 +144,7 @@ var errorList = {
     wrong_token: {
       "type:":   "error",
       "id":      "wrong_token",
-      "message": "Your server token has either expired or is malformed. Try to sign back in for a new token.",
+      "message": "Your server token has either expired or is malformed. Try to log out and sign back in for a new token.",
       "url":     "https://docs.ignition.io/wrong-token"
     },
 
