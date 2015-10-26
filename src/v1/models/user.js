@@ -160,13 +160,8 @@ function update(connection, username, record) {
                 r.db('ignition')
                 .table('users')
                 .get(username)
-                .do((results) => {
-                    return r.branch(results,
-                        results.update(record),
-                        r.error('database_error')
-                    )
-                })
-            )
+                .update(record)
+            )      
         })
     }
 

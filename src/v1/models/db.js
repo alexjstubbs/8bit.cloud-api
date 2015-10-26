@@ -11,6 +11,7 @@ var config      = require('../config.json'),
 /* 
  * Connect and return connection object
  */
+
 exports.connection = () => {
     return new Promise((resolve, reject) => {
         r.connect({ host: config.address, port: config.port }, (err, connection) => {
@@ -29,5 +30,5 @@ exports.connection = () => {
 exports.now = () => {
 	return new Promise((resolve, reject) => {
 		resolve(r.now());
-	}
+	});
 }

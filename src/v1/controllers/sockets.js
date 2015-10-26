@@ -9,76 +9,36 @@
       token         = require('../token'),
       socketioJwt   = require('socketio-jwt'),
       Promise       = require('bluebird'),
-      errors        = require('./errors').error,
+      errors        = require('../models/errors').error,
       _             = require('lodash'),
       config        = require('../config.json');
 
 
 /*
- * Use the '/network' namespace for connected ignition clients
- */
-
-var $nsp = $io.of('/network');
-
-/*
- * Use JSON Web Tokens for authorization to API
- */
-
-$nsp.use(socketioJwt.authorize({
-    secret: config.secret,
-    handshake: true
-}));
-
-function connectionValidation(socket) {
-
-    return new Promise((resolve, reject) => { 
-
-        let userToken = socket.handshake.query.token,
-        host          = socket.handshake.address;
-
-        token.verifyToken(userToken, (err, user) => {
-
-        if (err) {
-            reject(errors('wrong_token'));
-        }
-
-        else {
-            console.log("success!!:", user);
-            resolve();
-        }
-
-    })
-
-}
-
-/*
  * Promise Chain for Connection Event(s)
  */
 
-function socketConnection(socket) {
- 
+function socketConnection(socket, authUser) {
+
+    // Promise Chain
     return new Promise((resolve, reject) => { 
 
-        connectionValidation(socket)
-
-        .then(() => {
-            db.connection()
-        })
+        return db.connection()
 
         .then((connection) => {
-            return models.user.update(connection, { online: true } );
+            return [connection, db.now()];
         })
 
-        .then(connection) => {
-            return models.user.update(connection, { lastseen: db.now() }
-        }
+        .spread((connection, now) => {
+            return models.user.update(connection, authUser, { lastseen: now } );
+        })
 
         .then((result) => {
             resolve(result);
         })
 
         .catch((error) => {
-            resolve(error);
+            console.log(error);
         })
 
         .then(() => {
@@ -98,11 +58,39 @@ function socketConnection(socket) {
 
 exports.userConnection = () => {
 
-    // User Connected
-    $sio.on('connection', (socket) => {
-        console.log("Client Connected");
-    })
 
+    /*
+     * Use the '/network' namespace for connected ignition clients
+     */
+
+    var nsp = $io.of('/network');
+
+    /*
+     * Use JSON Web Tokens for authorization to API
+     */
+
+    nsp
+
+    .use(socketioJwt.authorize({
+        secret: config.secret,
+        handshake: true
+    }))
+
+    /*
+     * Connection / Disconnection Events ('/network')
+     */
+
+    .on('connection', (socket) => {
+        let authUser = socket.decoded_token.id;
+        console.log('hello!', authUser, ", Client #:", $io.engine.clientsCount);
+        
+        socket.on('disconnect', () => {
+            console.log('Client Disconnected:', authUser);
+        });
+
+        return socketConnection(socket, authUser);
+      
+    });
 
 
 }

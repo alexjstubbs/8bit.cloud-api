@@ -9,8 +9,7 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-GLOBAL.$io      = require('socket.io')(server);
-GLOBAL.$sio     = $io.listen(6052);
+
 
 var config      = require('./config.json'),
     models      = require('./models'),
@@ -32,6 +31,10 @@ var config      = require('./config.json'),
     app.env     = "Development";
     app.version = "v1";
 
+GLOBAL.$io      = require('socket.io')(server);
+GLOBAL.$sio     = $io.listen(6052);
+
+sockets.userConnection();
 
 var router = new Router({
   prefix: `/api/${app.version}`
