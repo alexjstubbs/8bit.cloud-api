@@ -4,7 +4,7 @@
  * JSON Schema Validation and Conditionals
  */
 
-var r           = require('rethinkdb');
+var r = require('rethinkdb');
 
 // User Schema
 var Schemas = {

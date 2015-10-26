@@ -27,7 +27,7 @@ function create(connection, userObj) {
     // Promise Chain
     return new Promise((resolve, reject) => { 
 
-        validation.schema(userObj, 'User')
+        validation.schema(userObj, 'User', false)
         
         .then((schemaInstance) => {
             return runDiff(userObj, schemaInstance);
@@ -141,8 +141,12 @@ function update(connection, username, record) {
     // Promise Chain
     return new Promise(function(resolve, reject) { 
 
-        buildQuery(username, record)
-       
+        return validation.schema(record, 'User', true)
+        
+        .then(() => {
+            return buildQuery(username, record);
+        })
+
         .then((query) => {
             resolve(runQuery(connection, query));
         })

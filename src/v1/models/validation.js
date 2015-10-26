@@ -13,25 +13,36 @@ var bcrypt      = require('bcrypt'),
 /*
  * JSON Schema Validation
  * 
- * @param: obj     : JSON Object to validate against Schema  (object) 
- * @param: schema  : JSON Schema                             (object.object) 
+ * @param: obj                 : JSON Object to validate against Schema  (object) 
+ * @param: schema              : JSON Schema                             (object) 
+ * @param: ignoreRequirements  : If true, required props are ignored     (bool) 
  * 
  */
 
-function schema(obj, schema) {
+function schema(obj, schema, ignoreRequirements) {
 
     return new Promise(function(resolve, reject) {
 
-        var validation = validate(obj, schemas[schema]);
+        let validation;
+
+        if (ignoreRequirements) {
+            let softSchema = schemas[schema];
+            delete softSchema.required;
+            validation = validate(obj, softSchema);
+        }
+
+        else {
+            validation = validate(obj, schemas[schema]);
+        }
 
         if (validation.errors.length) { 
 
              return Promise.all(validation.errors.map(function (error) {
 
-                return errors.error(error.schema.msg, stack);
+                return errors.error(error.schema.msg, error);
                 
             })).then(function(array) {
-                reject(array); 
+                reject(array[0]); 
             });
 
         }
