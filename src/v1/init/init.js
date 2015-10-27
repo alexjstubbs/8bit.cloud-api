@@ -1,35 +1,31 @@
 'use strict';
 
 /* 
- * Initilize Databases for first run
+ * Description: Set up ignition API server Datastore and Initial User Account.
  */
 
-var config      = require('../config.json'),
+var db          = require('../models/db'),
+    log         = require('../controllers/logging'),
+    config      = require('../config.json'),
     r           = require('rethinkdb'),
     _           = require('lodash'),
     databases   = require('./databases.json').databases,
     Promise     = require("bluebird"),
-    models     = require('../models'),
+    models      = require('../models'),
     connection;
 
-// Connect to datastore
-function connectDatabase() {
-    return new Promise((resolve, reject) => {
-        r.connect({ host: config.address, port: config.port }, (err, conn) => {
-            if (err) { reject(err) }
-            else { 
-                connection = conn;
-                resolve(conn);
-            }
-        });
-    });
-}
+/* 
+ * Create Databases (via databases.json)
+ */
 
-// Make Initial Databases (databases.json)
-function makeDatabases() {
+function makeDatabases(connection) {
     return Promise.all(_.keysIn(databases).map((db) => {
     
-        r.dbCreate(db).run(connection, (err, conn) => { if (err) { reject(err) }}) 
+        r.dbCreate(db).run(connection, (error, conn) => { 
+            if (error) { 
+                return error; 
+            }
+        }) 
 
         return databases[db].tables;
     
@@ -38,85 +34,69 @@ function makeDatabases() {
     });
 }
 
-// Make Database Tables (databases.json)
-function makeTables(tables) {
+/* 
+ * Create Database Tables (via databases.json)
+ */
+
+function makeTables(connection, tables) {
     return Promise.all(tables.map((table, c) => {
         for (var i = 0; i < table.length; i++) {
-            r.db(Object.keys(databases)[c]).tableCreate(table[i]).run(connection, (err, conn) => { if (err) { reject(err) }}) 
-        }         
-        return table;
-    }));
-}
-
-// Init Entry Function
-function init() {
-
-    // connectDatabase()
-
-    // .then((conn) => {
-    //     return makeDatabases();
-    // })
-
-    // .then((tables) => {
-    //     return makeTables(tables);
-    // })
-
-    // .then(() => {
-    //     return createDefaultUser();
-    // })
-
-    // .then(() => {
-    //     process.exit();
-    // })
-
-    // .catch(function(e) {
-    //     console.log("error:", e);
-    // })
-
-    // .then(() => {
-    //     process.exit();
-    // });
-    
-    connectDatabase()
-
-    .then(function(connection) {
-        // return createDefaultUser(connection)
-        return models.friends.remove(connection, "Alex", "Alex")
-    })
-    
-    .then((results) => { 
-        console.log("results:", results);
-    })
-
-    .then(() => {
-        process.exit();
-    })
-
-    .catch((error) => {
-        console.log("creation error:", error);
-    })
-
-    .then(() => {
-        process.exit();
+            r.db(Object.keys(databases)[c]).tableCreate(table[i]).run(connection, (error, conn) => { 
+                if (error) { console.log(error) }
+            }) 
+        }
+    })).then((array) => {
+        return array;
     });
-
 }
 
-// Insert Default Ignition User
-function createDefaultUser(connection) {
+/* 
+ * Create Default User Account ("admin" type)
+ */
 
-    var user = {
-        id          : config.username,
-        password    : config.password,
-        email       : config.email
-    }
+function createDefaultUser (connection) {
 
-    return models.user.create(connection, user);
+        var user = {
+            id          : config.username,
+            password    : config.password,
+            email       : config.email
+        }
 
+        setTimeout(function() {
+            return models.user.create(connection, user);   
+        }, 10000);
+           
 }
 
-// Call Set Up Function
-init();
+/* 
+ * Promise Chain Entry
+ */
+
+function init(connection) {
+
+    return makeDatabases(connection)
+    
+    .then((tables) => {
+        return makeTables(connection, tables);
+    })
+
+    .then(() => {
+        return createDefaultUser(connection);
+    })
+
+    .catch(function(error) {
+        console.error(error);
+    });
+  
+}
+
+/* 
+ * Entry Point
+ */
+
+return db.connection().then((connection) => {
+    init(connection);
+})
 
 
 /* Exports

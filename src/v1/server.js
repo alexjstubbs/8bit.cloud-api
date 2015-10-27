@@ -9,16 +9,14 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-
-
 var config      = require('./config.json'),
     models      = require('./models'),
     api         = require('./controllers'),
     sockets     = require('./controllers/sockets'),
     db          = require('./models/db'),
+    log         = require('./controllers/logging'),
     compress    = require('koa-compress'),
     json        = require('koa-json'),
-    logger      = require('koa-logger'),
     serve       = require('koa-static'),
     Router      = require('koa-router'),
     koa         = require('koa'),
@@ -44,14 +42,15 @@ var router = new Router({
 app
     .use(router.routes())
     .use(router.allowedMethods())
-    .use(logger())
     .use(compress())
     .use(json());
 
 
 if (!module.parent) {
+
+
   app.listen(3000);
-  console.log('listening on port 3000');
+  log.debug('listening on port 3000');
 }
 
 // Error Handling
@@ -60,7 +59,7 @@ app.on('error', function(err){
 });
 
 process.on('uncaughtException', function (err) {
-  console.log(err.stack);
+  log.error(err.stack);
 });
 
 // Routing

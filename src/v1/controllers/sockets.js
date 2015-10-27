@@ -11,6 +11,7 @@
       Promise       = require('bluebird'),
       errors        = require('../models/errors').error,
       _             = require('lodash'),
+      ipaddr        = require('ipaddr.js'),
       config        = require('../config.json');
 
 
@@ -30,7 +31,7 @@ function socketConnection(socket, authUser) {
         })
 
         .spread((connection, now) => {
-            return models.user.update(connection, authUser, { lastseen: now } );
+            return models.user.update(connection, authUser.id, { lastseen: now, online: authUser.online, ip: authUser.ip } );
         })
 
         .then((result) => {
@@ -81,10 +82,17 @@ exports.userConnection = () => {
      */
 
     .on('connection', (socket) => {
-        let authUser = socket.decoded_token.id;
+
+        let authUser = {
+            id: socket.decoded_token.id,
+            ip: ipaddr.process(socket.request.connection._peername.address).toString(),
+            online: true
+        }
+
         console.log('hello!', authUser, ", Client #:", $io.engine.clientsCount);
         
         socket.on('disconnect', () => {
+            authUser.online = false;
             console.log('Client Disconnected:', authUser);
         });
 

@@ -40,15 +40,9 @@ var Schemas = {
                 ],
                 default         : "/satic/defaultAvatar.png",
             },
-            token: {
-                oneOf: [
-                    { type      : "null" }, 
-                    { type      : "string" },
-                ],
-                default         : null,
-            },
             messages: {
                 "$ref"          : this.Messages,
+                default         : {},
             },
             lastseen: {
                 oneOf: [
@@ -60,14 +54,14 @@ var Schemas = {
             },
             ip: {
                 oneOf: [ 
-                    { type      : "ipv4" }, 
-                    { type      : "ipv6" },
+                    { type      : "string" },
                     { type      : "null" },
                 ],
                 default         : null,
             },
             activities: {
                 "$ref"          : this.Activities,
+                default         : {},
             },
             friends: {       
                 oneOf: [ 
