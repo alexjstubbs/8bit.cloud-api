@@ -40,11 +40,38 @@ function socketConnection(socket, authUser) {
 
         .catch((error) => {
             console.log(error);
-        })
-
-        .then(() => {
             socket.disconnect();
         });
+
+    });
+
+}
+
+
+/*
+ * Promise Chain for API Event(s)
+ */
+
+function apiCall(socket, authUser, apiObj) {
+
+    // Promise Chain
+    return new Promise((resolve, reject) => { 
+
+        return db.connection()
+
+        .then((connection) => {
+            return models[apiObj.model][apiObj.method](connection, authUser, apiObj.payload)
+        })
+
+        .then((result) => {
+            resolve(result);
+        })
+
+        .catch((error) => {
+            console.log(error);
+            socket.disconnect();
+        })
+
 
     });
 
@@ -58,7 +85,6 @@ function socketConnection(socket, authUser) {
  */
 
 exports.userConnection = () => {
-
 
     /*
      * Use the '/network' namespace for connected ignition clients
@@ -83,23 +109,41 @@ exports.userConnection = () => {
 
     .on('connection', (socket) => {
 
+        /*
+        * Create Authenticated User Object
+        */
+        
         let authUser = {
             id: socket.decoded_token.id,
             ip: ipaddr.process(socket.request.connection._peername.address).toString(),
             online: true
         }
 
-        console.log('hello!', authUser, ", Client #:", $io.engine.clientsCount);
+        console.log('connection:', authUser, ", Client #:", $io.engine.clientsCount);
+        
+        /*
+        * On Disconnection of Socket/Client
+        */
         
         socket.on('disconnect', () => {
             authUser.online = false;
-            console.log('Client Disconnected:', authUser);
+            return socketConnection(socket, authUser);
+            console.log('disconnection:', authUser);
         });
+
+
+        /*
+        * Recieve an API Call
+        */
+        
+        socket.on('api', function (apiObj) {
+            return apiCall(socket, authUser, apiObj);
+        });
+
 
         return socketConnection(socket, authUser);
       
     });
-
 
 }
 

@@ -63,7 +63,8 @@ function createDefaultUser (connection) {
         }
 
         setTimeout(function() {
-            return models.user.create(connection, user);   
+            return models.user.create(connection, user);
+            process.exit();
         }, 10000);
            
 }

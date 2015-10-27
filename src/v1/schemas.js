@@ -42,7 +42,7 @@ var Schemas = {
             },
             messages: {
                 "$ref"          : this.Messages,
-                default         : {},
+                default         : [],
             },
             lastseen: {
                 oneOf: [
@@ -61,7 +61,7 @@ var Schemas = {
             },
             activities: {
                 "$ref"          : this.Activities,
-                default         : {},
+                default         : [],
             },
             friends: {       
                 oneOf: [ 
@@ -86,8 +86,8 @@ var Schemas = {
 
         id                      : "Messages",
         type                    : "object",
-        required                : ["from", "to", "type", "Body"],
-        
+        required                : ["from", "to", "body"],
+
         properties: {
             from: {
                 type            : "string",
@@ -96,8 +96,7 @@ var Schemas = {
             },
             ip: {
                 oneOf: [ 
-                    { type      : "ipv4" }, 
-                    { type      : "ipv6" },
+                    { type      : "string" }, 
                     { type      : "null" },
                 ] 
             },
