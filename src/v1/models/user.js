@@ -42,7 +42,15 @@ function create(connection, userObj) {
         })
 
         .then((query) => {
-            resolve(runQuery(connection, query));
+            return runQuery(connection, query);
+        })
+
+        .then(() => {
+            return token.issueToken({id: userObj.username});
+        })
+
+        .then((token) => {
+            resolve({token: token});
         })
 
         .catch((error) => {
@@ -88,7 +96,7 @@ function create(connection, userObj) {
  * 
  */
 
-function get(connection, username) {
+function get(connection, authUser, username) {
     
     // Promise Chain
     return new Promise(function(resolve, reject) { 
@@ -136,7 +144,7 @@ function get(connection, username) {
  *
  */
 
-function update(connection, username, record) {
+function update(connection, authUser, record) {
     
     // Promise Chain
     return new Promise(function(resolve, reject) { 
@@ -163,7 +171,7 @@ function update(connection, username, record) {
             resolve(
                 r.db('ignition')
                 .table('users')
-                .get(username)
+                .get(authUser.id)
                 .update(record)
             )      
         })

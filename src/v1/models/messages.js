@@ -121,7 +121,7 @@ function get(connection, authUser, offset) {
                 .table('messages')
                 .filter({recipient: authUser.id})
                 .orderBy('date')
-                .slice(offset,offset+10)
+                .slice(offset,offset+25)
             )
         })
     }

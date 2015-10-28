@@ -18,6 +18,7 @@ var config      = require('./config.json'),
     compress    = require('koa-compress'),
     json        = require('koa-json'),
     serve       = require('koa-static'),
+    bodyParser  = require('koa-body')(),
     Router      = require('koa-router'),
     koa         = require('koa'),
     path        = require('path'),
@@ -86,11 +87,19 @@ process.on('uncaughtException', function (err) {
  * Routing Rules
  */
 
+router.post('/signup', bodyParser,
+    function *(next) {
+        let self = this;
+        yield api.postEndpoint('user', 'create', self);
+    }
+);
+
+
 router.get('/friends/:id', 
 
     function *(next) {
         let self = this;
-        yield api.endpoint('friends', 'get', self);
+        yield api.getEndpoint('friends', 'get', self);
     }
 
 );
@@ -100,7 +109,7 @@ router.get('/user/token/issue/:id',
 
     function *(next) {
         let self = this;
-        yield api.endpoint('user', 'issueToken', self);
+        yield api.getEndpoint('user', 'issueToken', self);
     }
 
 );

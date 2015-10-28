@@ -65,7 +65,7 @@ function returnResource(model, method, args) {
 }
 
 /*
- * Single entry point for routing response
+ * Single entry point for GET routing response
  * 
  * description: Returns requested resouce 
  *
@@ -75,9 +75,24 @@ function returnResource(model, method, args) {
  * 
  */
 
-exports.endpoint = function* (model, method, self) {
+exports.getEndpoint = function* (model, method, self) {
     let params = yield mapArguments(self.params);
     self.type  = 'application/json';
     self.body  = yield returnResource(model, method, params);
 }
 
+/*
+ * Single entry point for POST routing response
+ * 
+ * description: Returns requested resouce 
+ *
+ * @param: model    : Model to Query     (string) 
+ * @param: method   : Model Method       (string) 
+ * @param: params   : Request Parameters (*)
+ * 
+ */
+
+exports.postEndpoint = function* (model, method, self) {
+    self.type  = 'application/json';
+    self.body  = yield returnResource(model, method, self.request.body);
+}

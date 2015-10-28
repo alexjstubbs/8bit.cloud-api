@@ -1,7 +1,7 @@
 "use strict";
 
 /*
- * Results Models
+ * Event Responses
  */
 
 /*
@@ -23,6 +23,12 @@ var response = function(id, object) {
  */
 
 var responseList = {
+
+    new_message: {
+      "type:":   "message",
+      "id":      "new_message",
+      "message": "You have a new message!"
+     },
 
     new_message: {
       "type:":   "message",

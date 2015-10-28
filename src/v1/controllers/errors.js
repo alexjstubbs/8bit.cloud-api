@@ -1,7 +1,7 @@
 "use strict";
 
 /*
- * Error Methods
+ * Error Responses
  */
 
 /*

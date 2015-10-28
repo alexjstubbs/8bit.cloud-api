@@ -40,10 +40,6 @@ var Schemas = {
                 ],
                 default         : "/satic/defaultAvatar.png",
             },
-            messages: {
-                "$ref"          : this.Messages,
-                default         : [],
-            },
             lastseen: {
                 oneOf: [
                     { type      : "date-time" }, 
@@ -58,10 +54,6 @@ var Schemas = {
                     { type      : "null" },
                 ],
                 default         : null,
-            },
-            activities: {
-                "$ref"          : this.Activities,
-                default         : [],
             },
             friends: {       
                 oneOf: [ 
