@@ -1,8 +1,8 @@
 "use strict";
 
-var _        = require('lodash'),
+var errorMap = require('../data/errorMap.json'),
     errors   = require('./errors').error,
-    errorMap = require('../errorMap.json');
+    _        = require('lodash');
 
 /*
  * runQuery
@@ -19,6 +19,7 @@ module.exports = (connection, query) => {
     return new Promise((resolve, reject) => {
     
         query.run(connection, (err, result) => {
+
 
             // General, Connection, or Defined Error
             if (err) { 

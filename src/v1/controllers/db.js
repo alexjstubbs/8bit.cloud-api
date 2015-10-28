@@ -6,7 +6,7 @@
 
 var config      = require('../config.json'),
     r           = require('rethinkdb'),
-    Promise     = require("bluebird");
+    Promise     = require('bluebird');
 
 /* 
  * Connect and return connection object

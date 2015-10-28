@@ -4,14 +4,14 @@
  * Description: Set up ignition API server Datastore and Initial User Account.
  */
 
-var db          = require('../models/db'),
+var models      = require('../models'),
+    db          = require('../controller/db'),
     log         = require('../controllers/logging'),
     config      = require('../config.json'),
+    databases   = require('./databases.json').databases,
     r           = require('rethinkdb'),
     _           = require('lodash'),
-    databases   = require('./databases.json').databases,
-    Promise     = require("bluebird"),
-    models      = require('../models'),
+    Promise     = require('bluebird'),
     connection;
 
 /* 

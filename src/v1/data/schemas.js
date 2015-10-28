@@ -76,6 +76,12 @@ var Schemas = {
                     { type      : "null" },
                 ],
                 default: false,
+            },
+            platform: {
+                type            : "string",
+                minLength       : "0",
+                maxLength       : "120",
+                default         : "unknown",
             }
 
         }
@@ -86,10 +92,10 @@ var Schemas = {
 
         id                      : "Messages",
         type                    : "object",
-        required                : ["from", "to", "body"],
+        required                : ["sender", "recipient", "body"],
 
         properties: {
-            from: {
+            sender: {
                 type            : "string",
                 minLength       : "2",
                 maxLength       : "15",
@@ -100,10 +106,14 @@ var Schemas = {
                     { type      : "null" },
                 ] 
             },
-            to: {
+            recipient: {
                 type            : "string",
                 minLength       : "2",
                 maxLength       : "15",
+            },
+            read: {
+                type            : "boolean",
+                default         : false,
             },
             type: {
                 oneOf: [ 
@@ -120,6 +130,7 @@ var Schemas = {
             attachment: {
                 oneOf: [ 
                     { type      : "string" },
+                    { type      : "uri" },
                     { type      : "null" },
                 ]
             },

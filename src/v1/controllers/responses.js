@@ -5,16 +5,16 @@
  */
 
 /*
- * result
+ * response
  * 
- * @param: id      : ID of Result in Reference to ResultList          (string) 
- * @param: object  : A String Representation of Possible Error Stack  (object) 
+ * @param: id      : ID of event/response in Reference to responseList (string) 
+ * @param: object  : A String Representation of Possible Error Stack   (object) 
  * 
  */
 
-var result = function(id, object) {
+var response = function(id, object) {
 
-    return { result: resultList[id], object: object };
+    return { response: reponseList[id], object: object };
 
 }
 
@@ -22,7 +22,13 @@ var result = function(id, object) {
  * resultList
  */
 
-var resultList = {
+var responseList = {
+
+    new_message: {
+      "type:":   "message",
+      "id":      "new_message",
+      "message": "You have a new message!"
+     },
 
     new_message: {
       "type:": 	 "message",
@@ -60,5 +66,5 @@ var resultList = {
 
 /* Exports
 -------------------------------------------------- */
-exports.result 		  = result;
-exports.resultList 	= resultList;
+exports.response 		  = response;
+exports.responseList 	= responseList;

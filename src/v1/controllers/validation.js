@@ -4,10 +4,10 @@
  * Validation related Functions and Methods
  */
 
-var bcrypt      = require('bcrypt'),
-    Promise     = require("bluebird"),
-    errors      = require("./errors"),
-    schemas     = require('../schemas').Schemas,
+var schemas     = require('../data/schemas').Schemas,
+    errors      = require('./errors'),
+    bcrypt      = require('bcrypt'),
+    Promise     = require('bluebird'),
     validate    = require('jsonschema').validate;
 
 /*

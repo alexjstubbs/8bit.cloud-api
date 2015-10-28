@@ -4,16 +4,16 @@
  * Socket.io Connections
  */
 
- var  db            = require('../models/db'),
-      models        = require('../models'),
-      token         = require('../token'),
-      socketioJwt   = require('socketio-jwt'),
-      Promise       = require('bluebird'),
-      errors        = require('../models/errors').error,
+ var  models        = require('../models'),
+      config        = require('../config.json'),
+      db            = require('./db'),
+      token         = require('./token'),
+      errors        = require('./errors').error,
+      response      = require('./responses').response,
       _             = require('lodash'),
       ipaddr        = require('ipaddr.js'),
-      config        = require('../config.json');
-
+      socketioJwt   = require('socketio-jwt'),
+      Promise       = require('bluebird');
 
 /*
  * Promise Chain for Connection Event(s)
@@ -86,17 +86,12 @@ function apiCall(socket, authUser, apiObj) {
 
 exports.userConnection = () => {
 
-    /*
-     * Use the '/network' namespace for connected ignition clients
-     */
-
-    var nsp = $io.of('/network');
-
+  
     /*
      * Use JSON Web Tokens for authorization to API
      */
 
-    nsp
+    $nsp
 
     .use(socketioJwt.authorize({
         secret: config.secret,
@@ -118,6 +113,12 @@ exports.userConnection = () => {
             ip: ipaddr.process(socket.request.connection._peername.address).toString(),
             online: true
         }
+
+        /*
+         * Send User to their namespaced room
+         */
+
+        socket.join(`/user/${authUser.id}`);
 
         console.log('connection:', authUser, ", Client #:", $io.engine.clientsCount);
         

@@ -6,9 +6,9 @@
  *
  */
 
- var  db        = require('../models/db'),
-      models    = require('../models'),
-      Promise   = require("bluebird"),
+ var  models    = require('../models'),
+      db        = require('./db'),
+      Promise   = require('bluebird'),
       _         = require('lodash');
 
 /*

@@ -2,9 +2,10 @@
  * JSON Web Tokens
  */
 
-var jwt     = require('jsonwebtoken'),
-    Promise = require('bluebird'),
-    config  = require('./config.json');
+var config  = require('../config.json'),
+	jwt     = require('jsonwebtoken'),
+    Promise = require('bluebird');
+    
 
 /*
  * issueToken

@@ -4,13 +4,13 @@
  * User API Models
  */ 
 
-var r           = require('rethinkdb'),
+var validation  = require('../controllers/validation'),
+    runDiff     = require('../controllers/runDiff'),
+    token       = require('../controllers/token'),
+    runQuery    = require('../controllers/runQuery'),
+    r           = require('rethinkdb'),
     _           = require('lodash'),
-    bcrypt      = require('bcrypt'),
-    validation  = require('./validation'),
-    runDiff     = require('./runDiff'),
-    token       = require('../token'),
-    runQuery    = require('./runQuery');
+    bcrypt      = require('bcrypt');
 
 /*
  * create

@@ -4,9 +4,9 @@
  * Ignition API Server Logging Configuration
  */
 
-var winston    = require('winston'),
-    Papertrail = require('winston-papertrail').Papertrail,
-    config     = require('../config.json');
+var config     = require('../config.json'),
+    winston    = require('winston'),
+    Papertrail = require('winston-papertrail').Papertrail;
 
 /*
  * Configured Logging Levels
@@ -18,6 +18,7 @@ module.exports = new winston.Logger({
             level:            'debug',
             handleExceptions: true,
             colorize:         true,
+            json:             true,
             timestamp: () => {
                 return Date.now();
             },

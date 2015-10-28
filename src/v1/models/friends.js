@@ -4,12 +4,12 @@
  * Friends API Models
  */ 
 
-var r           = require('rethinkdb'),
+var validation  = require('../controllers/validation.js'),
+    runDiff     = require('../controllers/runDiff.js'),
+    runQuery    = require('../controllers/runQuery.js'),
+    r           = require('rethinkdb'),
     _           = require('lodash'),
-    bcrypt      = require('bcrypt'),
-    validation  = require('./validation.js'),
-    runDiff     = require('./runDiff.js'),
-    runQuery    = require('./runQuery.js');
+    bcrypt      = require('bcrypt');
 
 /*
  * add
