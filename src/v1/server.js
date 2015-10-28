@@ -94,9 +94,15 @@ router.post('/signup', bodyParser,
     }
 );
 
+router.post('/login', bodyParser,
+    function *(next) {
+        let self = this;
+        yield api.postEndpoint('user', 'login', self);
+    }
+);
 
+// Public facing API rules
 router.get('/friends/:id', 
-
     function *(next) {
         let self = this;
         yield api.getEndpoint('friends', 'get', self);
@@ -104,9 +110,7 @@ router.get('/friends/:id',
 
 );
 
-
 router.get('/user/token/issue/:id', 
-
     function *(next) {
         let self = this;
         yield api.getEndpoint('user', 'issueToken', self);

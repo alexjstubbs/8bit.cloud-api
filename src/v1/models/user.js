@@ -8,6 +8,7 @@ var validation  = require('../controllers/validation'),
     runDiff     = require('../controllers/runDiff'),
     token       = require('../controllers/token'),
     runQuery    = require('../controllers/runQuery'),
+    errors      = require('../controllers/errors').error,
     r           = require('rethinkdb'),
     _           = require('lodash'),
     bcrypt      = require('bcrypt');
@@ -27,7 +28,7 @@ function create(connection, userObj) {
     // Promise Chain
     return new Promise((resolve, reject) => { 
 
-        validation.schema(userObj, 'User', false)
+        return validation.schema(userObj, 'User', false)
         
         .then((schemaInstance) => {
             return runDiff(userObj, schemaInstance);
@@ -83,8 +84,9 @@ function create(connection, userObj) {
             )
         })
     }
-
 }
+
+
 
 /*
  * get
@@ -99,9 +101,9 @@ function create(connection, userObj) {
 function get(connection, authUser, username) {
     
     // Promise Chain
-    return new Promise(function(resolve, reject) { 
+    return new Promise((resolve, reject) => { 
 
-        buildQuery(username)
+        return buildQuery(username)
        
         .then((query) => {
             resolve(runQuery(connection, query));
@@ -132,6 +134,70 @@ function get(connection, authUser, username) {
 
 }
 
+/*
+ * login
+ * 
+ * description: Attemps to login a user. Returns token if successful
+ *
+ * @param: connection  : RethinkDB connection Object (connection object) 
+ * @param: credentials : The users credentials       (string) 
+ * 
+ */
+
+function login(connection, credentials) {
+    
+    // Promise Chain
+    return new Promise((resolve, reject) => { 
+
+        return buildQuery(credentials)
+       
+        .then((query) => {
+            return runQuery(connection, query);
+        })
+
+        .then((result) => {
+            return comparePasswordHash(credentials, result);
+        })
+
+        .then((result) => {
+            return token.issueToken({id: credentials.username})
+        })
+
+        .then((token) => {
+            resolve({token: token});
+        })
+
+        .catch(function(error) {
+            reject(error);
+        });
+
+    });
+
+    // Build Unique Query
+    function buildQuery(credentials) {
+        return new Promise((resolve, reject) => {
+            resolve(
+                r.db('ignition')
+                .table('users')
+                .get(credentials.username)('password')
+            )
+        })
+    }
+
+    // Compare Hashed Password from Datastore
+    function comparePasswordHash(credentials, hash) {
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(credentials.password, hash, (err, results) => {
+                if (err || results === false) {
+                    reject(errors('wrong_password'));
+                }
+                else {
+                    resolve (results);
+                }
+            });
+        });
+    }
+}
 
 /*
  * update
@@ -147,7 +213,7 @@ function get(connection, authUser, username) {
 function update(connection, authUser, record) {
     
     // Promise Chain
-    return new Promise(function(resolve, reject) { 
+    return new Promise((resolve, reject) => { 
 
         return validation.schema(record, 'User', true)
         
@@ -192,9 +258,9 @@ function update(connection, authUser, record) {
 function issueToken(connection, username) {
 
     // Promise Chain
-    return new Promise(function(resolve, reject) { 
+    return new Promise((resolve, reject) => { 
 
-        createToken(username)
+        return createToken(username)
        
         .then((token) => {
             resolve({token: token});
@@ -219,5 +285,6 @@ function issueToken(connection, username) {
 -------------------------------------------------- */
 exports.create     = create;
 exports.get        = get;
+exports.login      = login;
 exports.update     = update;
 exports.issueToken = issueToken;
