@@ -219,7 +219,6 @@ function removeAFriend(token, done) {
 }
 
 
-
 /*
  * Test Suite Chain
  */
@@ -261,6 +260,11 @@ function friendSuite(token, done) {
                 done();
             })
 
+            .then(() => {
+                return messagesSuite(token);
+                done();
+            })
+
             .catch(done);
 
         });
@@ -269,6 +273,140 @@ function friendSuite(token, done) {
 }
 
 
+/*
+ * Test Suite for Messages Methods
+ */
+
+/*
+ * Sends a Message
+ */
+
+function sendAMessage(token, done) {
+
+    return new Promise((resolve, reject) => { 
+
+        var client = io.connect(suri, opts(token));
+
+        client.once("connect", function() {
+            client.emit('api', {model: 'messages', method: 'send', payload: {
+                recipient: userObject.id,
+                body: "Test Message"
+            }});
+        });
+
+        client.once('event', function(message) {
+            resolve(message);
+            client.disconnect();
+        });   
+
+        client.once('error', function(message) {
+            resolve(message);
+            client.disconnect();
+        });
+      
+    })
+}
+
+/*
+ * Sends a Message
+ */
+
+function getMessages(token, done) {
+
+    return new Promise((resolve, reject) => { 
+
+        var client = io.connect(suri, opts(token));
+
+        client.once("connect", function() {
+            client.emit('api', {model: 'messages', method: 'get', payload: 0 });
+        });
+
+        client.once('event', function(message) {
+            resolve(message);
+            client.disconnect();
+        });   
+
+        client.once('error', function(message) {
+            resolve(message);
+            client.disconnect();
+        });
+      
+    })
+}
+
+/*
+ * Deletes a Message
+ */
+
+function deleteAMessage(token, uuid, done) {
+
+    return new Promise((resolve, reject) => { 
+
+        var client = io.connect(suri, opts(token));
+
+        client.once("connect", function() {
+            client.emit('api', {model: 'messages', method: 'remove', payload: uuid });
+        });
+
+        client.once('event', function(message) {
+            resolve(message);
+            client.disconnect();
+        });   
+
+        client.once('error', function(message) {
+            resolve(message);
+            client.disconnect();
+        });
+      
+    })
+}
 
 
+
+/*
+ * Test Suite Chain
+ */
+
+function messagesSuite(token, done) {
+
+    var uuid;
+
+    describe("Messages API Methods", function () {
+
+        it("Sends a Message", (done) => {
+
+            return sendAMessage(token)
+            
+            .then((results) => {
+                results.should.have.property('errors').and.equal(0);
+                done();
+            })
+
+        });
+
+        it("Gets Messages", (done) => {
+
+            return getMessages(token)
+            
+            .then((results) => {
+                results.should.be.an('array').and.to.have.length.above(0);
+                uuid = results[0].id;
+                done();
+            })
+
+        });
+
+        it("Deletes a Message", (done) => {
+
+            return deleteAMessage(token, uuid)
+            
+            .then((results) => {
+                results.should.have.property('deleted').and.equal(1);
+                done();
+            })
+
+        });
+ 
+    });
+}
 

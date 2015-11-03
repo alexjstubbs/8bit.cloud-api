@@ -84,7 +84,7 @@ var Schemas = {
 
         id                      : "Messages",
         type                    : "object",
-        required                : ["sender", "recipient", "body"],
+        required                : ["recipient", "body"],
 
         properties: {
             sender: {

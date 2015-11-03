@@ -143,7 +143,7 @@ function remove(connection, authUser, uuid) {
 	// Promise Chain
     return new Promise(function(resolve, reject) { 
 
-        return buildQuery(payload)
+        return buildQuery(uuid)
         
         .then((query) => {
             resolve(runQuery(connection, query));
@@ -156,13 +156,13 @@ function remove(connection, authUser, uuid) {
     });
 
 	// Build Unique Query
-    function buildQuery(payload) {
+    function buildQuery(uuid) {
         return new Promise((resolve, reject) => {
             resolve(
                 r.db('ignition')
-                .table('users')
-                .get(authUser.id)
-               // Do Stuff
+                .table('messages')
+                .filter({id: uuid, recipient: authUser.id})
+                .delete()
             )
         })
     }
