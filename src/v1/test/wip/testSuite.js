@@ -1,12 +1,11 @@
 'use strict';
 
-var config   = require('../config.json'),
-	io 		 = require('socket.io-client'),
-	rp 		 = require('request-promise'),
+var chai 	 = require('chai'),
+    should 	 = chai.should(),
+    io 		 = require('socket.io-client'),
+    rp 		 = require('request-promise'),
 	Promise  = require('bluebird'),
 	uri 	 = "http://localhost:3000/api/v1/signup";
-	// uri 	 = `http:\/\/${config.address}:${config.port}/api/v1/signup`;
-
 
 // Make "random" user
 function makeUser() {

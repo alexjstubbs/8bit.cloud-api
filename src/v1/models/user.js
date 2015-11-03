@@ -47,7 +47,7 @@ function create(connection, userObj) {
         })
 
         .then(() => {
-            return token.issueToken({id: userObj.username});
+            return token.issueToken({id: userObj.id});
         })
 
         .then((token) => {
@@ -218,7 +218,7 @@ function update(connection, authUser, record) {
         return validation.schema(record, 'User', true)
         
         .then(() => {
-            return buildQuery(username, record);
+            return buildQuery(record);
         })
 
         .then((query) => {
@@ -232,7 +232,7 @@ function update(connection, authUser, record) {
     });
 
     // Build Unique Query
-    function buildQuery(username, record) {
+    function buildQuery(record) {
         return new Promise((resolve, reject) => {
             resolve(
                 r.db('ignition')

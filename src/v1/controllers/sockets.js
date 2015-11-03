@@ -31,7 +31,7 @@ function socketConnection(socket, authUser) {
         })
 
         .spread((connection, now) => {
-            return models.user.update(connection, authUser.id, { lastseen: now, online: authUser.online, ip: authUser.ip } );
+            return models.user.update(connection, authUser, { lastseen: now, online: authUser.online, ip: authUser.ip } );
         })
 
         .then((result) => {
@@ -39,7 +39,7 @@ function socketConnection(socket, authUser) {
         })
 
         .catch((error) => {
-            console.log(error);
+            console.log("error", error);
             socket.disconnect();
         });
 
@@ -69,6 +69,7 @@ function apiCall(socket, authUser, apiObj) {
 
         .catch((error) => {
             console.log(error);
+            reject(error);
             socket.disconnect();
         })
 
@@ -121,7 +122,7 @@ exports.userConnection = () => {
         socket.join(`/user/${authUser.id}`);
 
         console.log('connection:', authUser, ", Client #:", $io.engine.clientsCount);
-        
+      
         /*
         * On Disconnection of Socket/Client
         */
@@ -138,11 +139,15 @@ exports.userConnection = () => {
         */
         
         socket.on('api', function (apiObj) {
-            return apiCall(socket, authUser, apiObj);
-        });
+            return apiCall(socket, authUser, apiObj)
+            .then((results) => {
+                socket.emit('event', results);
+            })
+        })
 
+        return socketConnection(socket, authUser)
 
-        return socketConnection(socket, authUser);
+        
       
     });
 

@@ -32,7 +32,7 @@ function mapArguments(args) {
 /*
  * returnResouce
  * 
- * description: Promise Chain that Returns Requested Resouce 
+ * description: Promise Chain that Returns Requested Public Resouce 
  *
  * @param: model    : Model to Query    (string) 
  * @param: method   : Model Method      (string) 
