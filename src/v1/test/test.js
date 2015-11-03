@@ -22,20 +22,15 @@ function opts(token) {
     }
 }
 
-
-/*
- * Test Suite
- */
-
-
 /*
  * Creates New Random User
  */
 
-userObject = { id: `test-${Math.random().toString(36).substring(10)}`,
-               password: `test-${Math.random().toString(36).substring(7)}`,
-               email: `test-${Math.random().toString(36).substring(7)}@test.com`
-             } 
+userObject = { 
+    id: `test-${Math.random().toString(36).substring(10)}`,
+    password: `test-${Math.random().toString(36).substring(7)}`,
+    email: `test-${Math.random().toString(36).substring(7)}@test.com`
+} 
 
 /*
  * Signs up User
@@ -47,12 +42,15 @@ function signUpUser(userObject) {
                 uri: uri + 'signup/',
                 body: userObject,
                 json: true 
-    })
-
+    });
 }
 
 /*
- * Test Suite
+ * Test Suite for Connection and Authentication to API
+ */
+
+ /*
+ * Test Suite Chain
  */
 
 describe("Sign Up User", function () {
@@ -67,7 +65,7 @@ describe("Sign Up User", function () {
         })
 
         .then((token) => {
-           return lookUpUserSuite(token.token);
+           return userSuite(token.token);
         })
 
         .catch(done);
@@ -76,7 +74,12 @@ describe("Sign Up User", function () {
 });
 
 /*
- * Test Suite
+ * Test Suite for User Methods
+ */
+
+
+/*
+ * Look Up User
  */
 
 function lookUpUser(token, done) {
@@ -102,10 +105,15 @@ function lookUpUser(token, done) {
     })
 }
 
-function lookUpUserSuite(token, done) {
-    describe("Looks up User", function () {
 
-        it("Found User", (done) => {
+/*
+ * Test Suite Chain
+ */
+
+function userSuite(token, done) {
+    describe("User API Methods", function () {
+
+        it("Looked up User", (done) => {
 
             return lookUpUser(token)
             
@@ -114,129 +122,153 @@ function lookUpUserSuite(token, done) {
                 done();
             })
 
+            .then(() => {
+                 return friendSuite(token);
+            })
+
             .catch(done);
 
         });
+
+    });
+}
+
+/*
+ * Test Suite for Friend Methods
+ */
+
+/*
+ * Adds a Friend
+ */
+
+function addAFriend(token, done) {
+
+    return new Promise((resolve, reject) => { 
+
+        var client = io.connect(suri, opts(token));
+
+        client.once("connect", function() {
+            client.emit('api', {model: 'friends', method: 'add', payload: userObject.id});
+        });
+
+        client.once('event', function(message) {
+            resolve(message);
+            client.disconnect();
+        });   
+
+        client.once('error', function(message) {
+            resolve(message);
+            client.disconnect();
+        });
+      
+    })
+}
+
+/*
+ * Gets Friends List
+ */
+
+function getFriends(token, done) {
+
+    return new Promise((resolve, reject) => { 
+
+        var client = io.connect(suri, opts(token));
+
+        client.once("connect", function() {
+            client.emit('api', {model: 'friends', method: 'get', payload: userObject.id});
+        });
+
+        client.once('event', function(message) {
+            resolve(message);
+            client.disconnect();
+        });   
+
+        client.once('error', function(message) {
+            resolve(message);
+            client.disconnect();
+        });
+      
+    })
+}
+
+/*
+ * Gets Friends List
+ */
+
+function removeAFriend(token, done) {
+
+    return new Promise((resolve, reject) => { 
+
+        var client = io.connect(suri, opts(token));
+
+        client.once("connect", function() {
+            client.emit('api', {model: 'friends', method: 'remove', payload: userObject.id});
+        });
+
+        client.once('event', function(message) {
+            resolve(message);
+            client.disconnect();
+        });   
+
+        client.once('error', function(message) {
+            resolve(message);
+            client.disconnect();
+        });
+      
+    })
+}
+
+
+
+/*
+ * Test Suite Chain
+ */
+
+function friendSuite(token, done) {
+    describe("Friend API Methods", function () {
+
+        it("Added a Friend", (done) => {
+
+            return addAFriend(token)
+            
+            .then((results) => {
+                results.should.have.property('errors').and.equal(0);
+                done();
+            })
+
+        });
+
+        it("Got Friends List", (done) => {
+
+            return getFriends(token)
+           
+            .then((results) => {
+                results.should.have.property('friends').and.contain(userObject.id);
+                done();
+            })
+
+            .catch(done);
+
+        });
+
+
+        it("Removed a Friend", (done) => {
+
+            return removeAFriend(token)
+           
+            .then((results) => {
+                results.should.have.property('errors').and.equal(0);
+                done();
+            })
+
+            .catch(done);
+
+        });
+
     });
 }
 
 
 
-
-
-
-// var models         = require('../models'),
-//     config         = require('../config.json'),
-//     db             = require('../controllers/db'),
-//     io             = require('socket.io-client'),
-//     rp             = require('request-promise'),
-//     child_process  = require('child_process'),
-//     chai           = require('chai'),
-//     chaiAsPromised = require("chai-as-promised"),
-//     Promise        = require('bluebird'),
-//     assert         = chai.assert,
-//     expect         = chai.expect,
-//     uri            = "http://localhost:3000/api/v1/signup",
-//     token,
-//     data,
-//     socket;
-
-//     // Use Promises with Chai
-//     chai.use(chaiAsPromised);
-//     chai.should();
-
-// var user = { 
-//     id: `test-${Math.random().toString(36).substring(10)}`,
-//     password: `test-${Math.random().toString(36).substring(7)}`,
-//     email: `test-${Math.random().toString(36).substring(7)}@test.com`
-// }
-
-// var options = {
-//     method: 'POST',
-//     uri: uri,
-//     body: user,
-//     json: true 
-// }
-
-// beforeEach(() => {
-//     setTimeout(function(){
-//       foo = true;
-//     }, 150);
-// })
-
-// before(() => {
-//     // var child = child_process.spawn('node', ['server'], {
-//     //     cwd: '../'
-//     // });
-// });
-
-// after('Clean up and Exit API Node Instance', () => {
-//     // user = { 
-//     //  id: `test-${Math.random().toString(36).substring(10)}`,
-//     //  password: `test-${Math.random().toString(36).substring(7)}`,
-//     //  email: `test-${Math.random().toString(36).substring(7)}@test.com`
-//     // }
-// });
-
-// // Create User
-// describe('Create User', function() {
-//   it('respond with JSON Web Token', function() {
-
-//     return rp(options)
-
-//     .then((results) => {
-//         expect(results).to.have.property('token');
-//         token = results.token;
-//     });
-
-//   });
-// });
-
-// // Connect, Authenticate
-// describe('Connect to API with Token', function() {
-
-//     it('Resolves Server API URI', function() {
-        
-//        socket = io.connect(uri, {
-//             'query': 'token=' + token.token
-//         });
-    
-//         socket.on('connect', function () {
-//             return true;
-//         });
-
-//     });
-
-// });
-
-// describe('API is communicating', function() {
-//     it('send back payloads', function() {
-//         socket.on('event', function(data){
-//             data = data;
-//             return data;
-//             wrapp();
-//         });
-//     });
-// });
-
-
-// // Get User via API
-// describe('Get a User profile', function() {
-  
-//     it('Send API command', function() {
-//         socket.emit('api', {model: 'messages', method: 'get', offset: 0});
-//     });
-
-// });
-
-// describe('Get a User profile', function() {
-//     it('Received User Profile', function() {   
-//         socket.on('event', function(data){
-//           console.log(data);
-//            expect(data).to.be.an('object')
-//         }); 
-        
-//     });
-// });
 
 

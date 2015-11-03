@@ -101,20 +101,4 @@ router.post('/login', bodyParser,
     }
 );
 
-// Public facing API rules
-
-router.get('/friends/:id', 
-    function *(next) {
-        let self = this;
-        yield api.getEndpoint('friends', 'get', self);
-    }
-);
-
-router.get('/user/token/issue/:id', 
-    function *(next) {
-        let self = this;
-        yield api.getEndpoint('user', 'issueToken', self);
-    }
-);
-
 

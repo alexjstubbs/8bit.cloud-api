@@ -22,12 +22,12 @@ var validation  = require('../controllers/validation.js'),
  * 
  */
 
-function add(connection, username, friend) {
+function add(connection, authUser, friend) {
     
     // Promise Chain
     return new Promise(function(resolve, reject) { 
 
-        buildQuery(username, friend)
+        buildQuery(authUser.id, friend)
        
         .then((query) => {
             resolve(runQuery(connection, query));
@@ -73,7 +73,7 @@ function add(connection, username, friend) {
  * 
  */
 
-function get(connection, username) {
+function get(connection, authUser, username) {
     
     // Promise Chain
     return new Promise(function(resolve, reject) { 
@@ -120,12 +120,12 @@ function get(connection, username) {
  * 
  */
 
-function remove(connection, username, friend) {
+function remove(connection, authUser, friend) {
     
     // Promise Chain
     return new Promise(function(resolve, reject) { 
 
-        buildQuery(username, friend)
+        buildQuery(authUser.id, friend)
        
         .then((query) => {
             resolve(runQuery(connection, query));
