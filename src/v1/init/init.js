@@ -5,7 +5,7 @@
  */
 
 var models      = require('../models'),
-    db          = require('../controller/db'),
+    db          = require('../controllers/db'),
     log         = require('../controllers/logging'),
     config      = require('../config.json'),
     databases   = require('./databases.json').databases,

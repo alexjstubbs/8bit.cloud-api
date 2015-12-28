@@ -10,8 +10,7 @@
   "author": "Alex Stubbs",
   "license": "ISC",
   "dependencies": {
-    "rethinkdb": "^2.1.1",
-    "bcrypt": "^0.8.0",
+    "bcrypt": "~0.8.0",
     "body-parser": "~1.0.0",
     "bunyan": "^1.1.0",
     "connect": "^3.2.0",
@@ -22,7 +21,14 @@
     "express-jwt": "^0.3.2",
     "express-session": "^1.8.2",
     "feedparser": "^0.19.2",
+    "jsonschema": "^1.0.2",
     "jsonwebtoken": "^5.4.0",
+    "koa": "^1.1.2",
+    "koa-body": "^1.4.0",
+    "koa-compress": "^1.0.8",
+    "koa-json": "^1.1.1",
+    "koa-router": "^5.3.0",
+    "koa-static": "^1.5.2",
     "lodash": "^3.10.1",
     "method-override": "^2.2.0",
     "morgan": "~1.0.0",
@@ -31,7 +37,10 @@
     "passport-local": "^1.0.0",
     "redis": "^2.2.3",
     "request": "^2.42.0",
+    "rethinkdb": "^2.1.1",
     "socket.io": "^1.1.0",
-    "socketio-jwt": "^2.3.5"
+    "socketio-jwt": "^2.3.5",
+    "winston": "^2.1.1",
+    "winston-papertrail": "^1.0.2"
   }
 }

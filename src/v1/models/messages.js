@@ -37,7 +37,7 @@ function send(connection, authUser, payload) {
 
         return validation.schema(payload, 'Messages', false)
 
-         .then((schemaInstance) => {
+        .then((schemaInstance) => {
             return runDiff(payload, schemaInstance);
         })
 

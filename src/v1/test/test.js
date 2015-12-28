@@ -310,7 +310,7 @@ function sendAMessage(token, done) {
 /*
  * Sends a Message
  */
-
+ 
 function getMessages(token, done) {
 
     return new Promise((resolve, reject) => { 

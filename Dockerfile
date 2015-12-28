@@ -1,7 +1,7 @@
 # x86 Enviorment for Ignition API
 #TODO: Allow for versioning of API in dockerfile
 
-FROM ubuntu:latest
+FROM coreos:latest
 MAINTAINER Alex Stubbs "alex@alexstubbs.com"
 
 ENV DEBIAN_FRONTEND noninteractive
