@@ -51,7 +51,7 @@ process.on('uncaughtException', function (err) {
 sockets.userConnection();
 
 /*  Rate Limiting Config
--------------------------------------------------- */
+-------------------------------------------0------- */
 
 var limiter = RateLimit({
     // window, delay, and max apply per-ip unless global is set to true
