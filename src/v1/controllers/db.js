@@ -1,7 +1,7 @@
 'use strict';
 
 /* 
- * RethinkDB Databases Connection
+ * RethinkDB Databases Connection.
  */
 
 var config      = require('../config.json'),
