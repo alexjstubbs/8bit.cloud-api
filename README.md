@@ -15,7 +15,7 @@ Using this application, you can host your own ignition client API server or cont
 * [RethinkDB](http://rethinkdb.com/)
 
 #### Optional
-* [IGDB API Key](https://www.igdb.com/api/request) (movinf to micorservice)
+* [IGDB API Key](https://www.igdb.com/api/request) (moving to micorservice)
 
 ## Installing via Docker
 	
