@@ -64,7 +64,7 @@ Your Settings file will look like this:
 | IGDBKey  | d9u12300idk01-2139d-s9  | Your personal API key generated on IGDB.com  |   
 
 After configuration, you will want to initiate the default databases and tables in the next step.
-## Initiate Default Datastore
+## Initiate Default Datastore (soon to be deprecated)
     node v1/init/init.js
 
 ----
