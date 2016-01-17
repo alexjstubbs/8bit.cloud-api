@@ -11,16 +11,17 @@ This repository contains the public Ignition API Server codebase.
 
 Using this application, you can host your own ignition client API server or contribute to the project to help improve the online aspect of the ignitionOS and ignition Client. 
 
-*This is currently a work in progress. Feel free to experiment but there is no stable API version as of yet.
+#### This is currently a work in progress. Feel free to experiment but there is no stable API version as of yet.
 
 
 ### Requirements
 
 * [NodeJS (4.0 or higher)](https://nodejs.org)
 * [RethinkDB](http://rethinkdb.com/)
+* [Cloud Hosting Provider](http://lowendbox.com/) with [Docker](https://www.docker.com/)
 
 #### Optional
-* [IGDB API Key](https://www.igdb.com/api/request) (note: moving to micorservice)
+* [IGDB API Key](https://www.igdb.com/api/request) (note: moving to micorservice, so may split from repo)
 
 ## Installing via Docker
 	
@@ -69,7 +70,7 @@ Your Settings file will look like this:
 | IGDBKey  | d9u12300idk01-2139d-s9  | Your personal API key generated on IGDB.com  |   
 
 After configuration, you will want to initiate the default databases and tables in the next step.
-## Initiate Default Datastore (soon to be deprecated)
+
     node v1/init/init.js
 
 ----
