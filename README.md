@@ -2,7 +2,8 @@
 
 ![io logo](http://i.imgur.com/G7Uwcoq.png)
 
-![Docker Repository on Quay](https://quay.io/repository/ignitionio/api-server/status "Docker ")
+![Docker Repository on Quay](https://quay.io/repository/ignitionio/api-server/status "Docker ") [![badge](https://img.shields.io/badge/CHAT%20NOW-%20%28/ignition%20dev%29-blue.svg)](https://slackignition.azurewebsites.net/) [![report bugs](https://img.shields.io/badge/REPORT-ISSUES-red.svg)](http://ignitionio.atlassian.net/)
+
 
 ----
 
