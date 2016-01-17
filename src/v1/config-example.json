@@ -1,0 +1,13 @@
+{
+	"address"  			: "localhost",
+	"port"	   			: "32770",
+	"secret"   			: "secretKey_",
+	"username" 			: "Admin",
+	"password" 			: "password@123",
+	"email"    			: "admin@myserver.com",
+	"useIGDB"  			: true,
+	"IGDBUrl"  			: "https://www.igdb.com/api/v1",
+	"IGDBKey"  			: "d9u12300idk01-2139d-s9",
+	"papertrailHost"	: "logs13.papertrailapp.com",
+    "papertrailPort"	: 00123
+}
