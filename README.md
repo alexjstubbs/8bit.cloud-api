@@ -2,9 +2,6 @@
 
 ![io logo](http://i.imgur.com/G7Uwcoq.png)
 
-[![Docker Repository on Quay](https://quay.io/repository/ignitionio/api-server/status "Docker Repository on Quay")](https://quay.io/repository/ignitionio/api-server)
-
-
 This repository contains the public Ignition API Server codebase.
 
 Using this application, you can host your own ignition client API server or contribute to the project to help improve the online aspect of the ignitionOS and ignition Client. 
