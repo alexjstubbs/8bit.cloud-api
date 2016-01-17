@@ -2,7 +2,7 @@
 
 ![io logo](http://i.imgur.com/G7Uwcoq.png)
 
-![Docker Repository on Quay](https://quay.io/repository/ignitionio/api-server/status "Docker ") [![badge](https://img.shields.io/badge/CHAT%20NOW-%20%28/ignition%20dev%29-blue.svg)](https://slackignition.azurewebsites.net/) [![report bugs](https://img.shields.io/badge/REPORT-ISSUES-red.svg)](http://ignitionio.atlassian.net/)
+![Docker Repository on Quay](https://quay.io/repository/ignitionio/api-server/status "Docker ") [![badge](https://img.shields.io/badge/CHAT%20NOW-%20SLACK-blue.svg)](https://slackignition.azurewebsites.net/) [![report bugs](https://img.shields.io/badge/REPORT-ISSUES-red.svg)](http://ignitionio.atlassian.net/)
 
 
 ----
@@ -11,7 +11,7 @@ This repository contains the public Ignition API Server codebase.
 
 Using this application, you can host your own ignition client API server or contribute to the project to help improve the online aspect of the ignitionOS and ignition Client. 
 
-*This is currently a work in progress. Feel free to experiment but there is no stable API version as of yet.*
+*This is currently a work in progress. Feel free to experiment but there is no stable API version as of yet.
 
 
 ### Requirements
