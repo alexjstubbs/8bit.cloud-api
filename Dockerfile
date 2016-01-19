@@ -34,4 +34,4 @@ ADD . /src
 EXPOSE 9091
 
 # Run app
-CMD ["node", "/src/server.js"]
+CMD ["node", "server.js"]
