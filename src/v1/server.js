@@ -9,12 +9,14 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-var config      = require('./v1/config.json'),
-    models      = require('./models'),
-    api         = require('./controllers'),
-    sockets     = require('./controllers/sockets'),
-    db          = require('./controllers/db'),
-    log         = require('./controllers/logging'),
+console.log("DIR", __dirname);
+
+var config      = require('config.json'),
+    models      = require('models'),
+    api         = require('controllers'),
+    sockets     = require('controllers/sockets'),
+    db          = require('controllers/db'),
+    log         = require('controllers/logging'),
     compress    = require('koa-compress'),
     json        = require('koa-json'),
     serve       = require('koa-static'),
