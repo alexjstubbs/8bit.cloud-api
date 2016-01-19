@@ -23,12 +23,11 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
   && tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
   && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc
 
-
 COPY ./src /src
-RUN cd /src; npm install
+RUN cd /src/v1; npm install
 
 # Define working directory
-WORKDIR /src
+WORKDIR /src/v1
 ADD . /src
 
 # Expose port
