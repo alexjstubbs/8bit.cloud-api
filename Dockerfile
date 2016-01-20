@@ -32,7 +32,7 @@ ADD . /src
 
 # Copy Configuration from HOST
 WORKDIR /
-COPY /home/alexander/config.json /src/v1/conig.json
+COPY home/alexander/config.json /src/v1/conig.json
 
 # Expose port
 EXPOSE 9091
