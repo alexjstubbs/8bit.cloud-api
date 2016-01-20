@@ -1,5 +1,8 @@
 FROM buildpack-deps:wheezy
 
+# Copy Configuration from HOST
+COPY /home/alexander/config.json /src/v1/conig.json
+
 # gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
   && for key in \
@@ -30,8 +33,6 @@ RUN cd /src/v1; npm install
 WORKDIR /src/v1
 ADD . /src
 
-# Copy Configuration from HOST
-COPY /home/alexander/config.json /src/v1/conig.json
 
 # Expose port
 EXPOSE 9091
