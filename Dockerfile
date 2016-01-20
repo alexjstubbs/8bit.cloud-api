@@ -31,14 +31,10 @@ WORKDIR /src/v1
 ADD . /src
 
 # Copy Configuration from HOST
-WORKDIR /
-COPY home/alexander/config.json /src/v1/conig.json
+cp ~/config.json /src/v1/conig.json
 
 # Expose port
 EXPOSE 9091
-
-# Define working directory again
-WORKDIR /src/v1
 
 # Run app
 CMD ["node", "/src/v1/server.js"]
