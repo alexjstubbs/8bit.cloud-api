@@ -5,9 +5,9 @@
 var path = require('path');
 
 try {
-    var config = require('~/keys/config.json');
+    var config = require('/home/alexander/keys/config.json');
 } catch(e) {
-    console.log('Set you your config.json file. File not found: ' + path);
+    console.log('Set you your config.json file. File not found: ' + __dirname);
     process.exit(1);
 }
 
