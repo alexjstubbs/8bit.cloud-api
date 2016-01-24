@@ -4,6 +4,14 @@
  * Socket.io Connections
  */
 
+try {
+    var config = require('~/keys/config.json');
+} catch(e) {
+    console.log('Set you your config.json file. File not found');
+    process.exit(1);
+}
+
+
  var  models        = require('../models'),
       db            = require('./db'),
       token         = require('./token'),
@@ -94,7 +102,7 @@ exports.userConnection = () => {
     $nsp
 
     .use(socketioJwt.authorize({
-        secret: process.env.ignition_secret,
+        secret: config.ignition_secret,
         handshake: true
     }))
 

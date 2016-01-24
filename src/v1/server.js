@@ -10,14 +10,12 @@
  */
 
 
-var config;
-
-// try {
-//     config = require('~/keys/config.json');
-// } catch(e) {
-//     // Compose hasn't set this up yet...
-//     console.log(e);
-// }
+try {
+    var config = require('~/keys/config.json');
+} catch(e) {
+    console.log('Set you your config.json file. File not found');
+    process.exit(1);
+}
 
 
 var models      = require('./models'),

@@ -2,6 +2,12 @@
  * JSON Web Tokens
  */
 
+try {
+    var config = require('~/keys/config.json');
+} catch(e) {
+    console.log('Set you your config.json file. File not found');
+    process.exit(1);
+}
 var jwt     = require('jsonwebtoken'),
     Promise = require('bluebird');
     
@@ -17,7 +23,7 @@ var jwt     = require('jsonwebtoken'),
 
 exports.issueToken = (payload) => {
     return new Promise((resolve, reject) => {
-        var token = jwt.sign(payload, process.env.ignition_secret);
+        var token = jwt.sign(payload, config.ignition_secret);
         resolve(token);
     });
 };
@@ -34,6 +40,6 @@ exports.issueToken = (payload) => {
 
 exports.verifyToken = (token, verified) => {
     return new Promise((resolve, reject) => {
-        resolve(jwt.verify(token, process.env.ignition_secret, {}, verified));
+        resolve(jwt.verify(token, config.ignition_secret, {}, verified));
     });
 };

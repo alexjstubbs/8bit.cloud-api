@@ -4,6 +4,14 @@
  * Description: Set up ignition API server Datastore and Initial User Account.
  */
 
+ try {
+    var config = require('~/keys/config.json');
+} catch(e) {
+    console.log('Set you your config.json file. File not found');
+    process.exit(1);
+}
+
+
 var models      = require('../models'),
     db          = require('../controllers/db'),
     log         = require('../controllers/logging'),
@@ -56,9 +64,9 @@ function makeTables(connection, tables) {
 function createDefaultUser (connection) {
 
         var user = {
-            id          : process.env.ignition_username,
-            password    : process.env.ignition_password,
-            email       : process.env.ignition_email
+            id          : config.ignition_username,
+            password    : config.ignition_password,
+            email       : config.ignition_email
         }
 
         setTimeout(function() {

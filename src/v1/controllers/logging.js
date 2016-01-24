@@ -4,6 +4,14 @@
  * Ignition API Server Logging Configuration
  */
 
+try {
+    var config = require('~/keys/config.json');
+} catch(e) {
+    console.log('Set you your config.json file. File not found');
+    process.exit(1);
+}
+
+
 var winston    = require('winston'),
     Papertrail = require('winston-papertrail').Papertrail;
 
@@ -23,8 +31,8 @@ module.exports = new winston.Logger({
             },
         }),
         new winston.transports.Papertrail({
-            host: process.env.ignition_papertrailHost,
-            port: process.env.ignition_papertrailPort,
+            host: config.papertrailHost,
+            port: config,papertrailPort,
             level: 'error',
             colorize: true,
             logFormat: function(level, message) {
