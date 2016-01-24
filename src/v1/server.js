@@ -10,12 +10,14 @@
  */
 
 
-try {
-    require('dotenv').config({path: '../.env'});
-} catch(e) {
-    // Compose hasn't set this up yet...
-    console.log(e);
-}
+var config;
+
+// try {
+//     config = require('~/keys/config.json');
+// } catch(e) {
+//     // Compose hasn't set this up yet...
+//     console.log(e);
+// }
 
 
 var models      = require('./models'),

@@ -27,12 +27,9 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 COPY ./src /src
 RUN cd /src/v1; npm install
 
-RUN echo ${ssh}
-
 # Define working directory
 WORKDIR /src/v1
 ADD . /src
-
 
 # Expose port
 EXPOSE 9091
