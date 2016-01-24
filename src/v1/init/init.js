@@ -7,7 +7,6 @@
 var models      = require('../models'),
     db          = require('../controllers/db'),
     log         = require('../controllers/logging'),
-    config      = require('../config.json'),
     databases   = require('./databases.json').databases,
     r           = require('rethinkdb'),
     _           = require('lodash'),
@@ -57,9 +56,9 @@ function makeTables(connection, tables) {
 function createDefaultUser (connection) {
 
         var user = {
-            id          : config.username,
-            password    : config.password,
-            email       : config.email
+            id          : process.env.ignition_username,
+            password    : process.env.ignition_password,
+            email       : process.env.ignition_email
         }
 
         setTimeout(function() {

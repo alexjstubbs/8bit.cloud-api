@@ -5,7 +5,6 @@
  */
 
  var  models        = require('../models'),
-      config        = require('../config.json'),
       db            = require('./db'),
       token         = require('./token'),
       errors        = require('./errors').error,
@@ -95,7 +94,7 @@ exports.userConnection = () => {
     $nsp
 
     .use(socketioJwt.authorize({
-        secret: config.secret,
+        secret: process.env.ignition_secret,
         handshake: true
     }))
 

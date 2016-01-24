@@ -2,8 +2,7 @@
  * JSON Web Tokens
  */
 
-var config  = require('../config.json'),
-	jwt     = require('jsonwebtoken'),
+var jwt     = require('jsonwebtoken'),
     Promise = require('bluebird');
     
 
@@ -18,7 +17,7 @@ var config  = require('../config.json'),
 
 exports.issueToken = (payload) => {
     return new Promise((resolve, reject) => {
-        var token = jwt.sign(payload, config.secret);
+        var token = jwt.sign(payload, process.env.ignition_secret);
         resolve(token);
     });
 };
@@ -35,6 +34,6 @@ exports.issueToken = (payload) => {
 
 exports.verifyToken = (token, verified) => {
     return new Promise((resolve, reject) => {
-        resolve(jwt.verify(token, config.secret, {}, verified));
+        resolve(jwt.verify(token, process.env.ignition_secret, {}, verified));
     });
 };

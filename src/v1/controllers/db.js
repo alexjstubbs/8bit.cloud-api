@@ -4,8 +4,7 @@
  * RethinkDB Databases Connection.
  */
 
-var config      = require('../config.json'),
-    r           = require('rethinkdb'),
+var r           = require('rethinkdb'),
     Promise     = require('bluebird');
 
 /* 
@@ -14,7 +13,7 @@ var config      = require('../config.json'),
 
 exports.connection = () => {
     return new Promise((resolve, reject) => {
-        r.connect({ host: config.address, port: config.port }, (err, connection) => {
+        r.connect({ host:  process.env.ignition_address, port: process.env.ignition_config.port }, (err, connection) => {
             if (err) { reject(err) }
             else { 
                 resolve(connection);
