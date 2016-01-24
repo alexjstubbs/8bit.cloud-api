@@ -23,6 +23,7 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
   && tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
   && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc
 
+COPY ./src/v1/config.json ./src/v1/conig.json
 COPY ./src /src
 RUN cd /src/v1; npm install
 
@@ -30,7 +31,6 @@ RUN cd /src/v1; npm install
 WORKDIR /src/v1
 ADD . /src
 
-ADD v1/config.json  /v1/conig.json
 
 # Expose port
 EXPOSE 9091
