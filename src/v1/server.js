@@ -9,7 +9,13 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
- require('dotenv').config({path: './.env'});
+
+try {
+    require('dotenv').config({path: '../.env'});
+} catch(e) {
+    // Compose hasn't set this up yet...
+    console.log(e);
+}
 
 
 var models      = require('./models'),
