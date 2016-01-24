@@ -27,9 +27,10 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 COPY ./src /src
 RUN cd /src/v1; npm install
 
+RUN echo $ssh-key
+
 # Define working directory
 WORKDIR /src/v1
-RUN wget https://bitbucket.org/!api/2.0/snippets/ignition-dev/58Mjb/e5194271bf36199ac4e7df3db45a39e178b12692/files/env -P /src 
 ADD . /src
 
 
