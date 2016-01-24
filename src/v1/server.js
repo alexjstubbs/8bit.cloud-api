@@ -9,12 +9,12 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-var os = require('os');
+var path = require('path');
 
 try {
     var config = require('~/keys/config.json');
 } catch(e) {
-    console.log('Set you your config.json file. File not found: ' + os.path);
+    console.log('Set you your config.json file. File not found: ' + path);
     process.exit(1);
 }
 
