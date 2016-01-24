@@ -30,7 +30,7 @@ RUN cd /src/v1; npm install
 WORKDIR /src/v1
 ADD . /src
 
-RUN curl -o file:///home/alexnader/config.json  /src/v1/conig.json
+ADD v1/config.json  /v1/conig.json
 
 # Expose port
 EXPOSE 9091
