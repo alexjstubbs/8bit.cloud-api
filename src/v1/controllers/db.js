@@ -4,12 +4,15 @@
  * RethinkDB Databases Connection.
  */
 
+var os = require('os');
+
 try {
     var config = require('~/keys/config.json');
 } catch(e) {
-    console.log('Set you your config.json file. File not found');
+    console.log('Set you your config.json file. File not found:', os.path);
     process.exit(1);
 }
+
 
 
 var r           = require('rethinkdb'),
