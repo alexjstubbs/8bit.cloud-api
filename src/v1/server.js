@@ -9,6 +9,9 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
+ require('dotenv').config({path: './.env'});
+
+
 var models      = require('./models'),
     api         = require('./controllers'),
     sockets     = require('./controllers/sockets'),
