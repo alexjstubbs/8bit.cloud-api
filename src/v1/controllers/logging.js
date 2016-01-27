@@ -5,7 +5,7 @@
  */
 
 
-var config     = require('./keys/config.js'),
+var config     = require('~/keys/config.js'),
     winston    = require('winston'),
     Papertrail = require('winston-papertrail').Papertrail;
 
