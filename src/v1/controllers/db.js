@@ -13,8 +13,6 @@ try {
     process.exit(1);
 }
 
-
-
 var r           = require('rethinkdb'),
     Promise     = require('bluebird');
 
