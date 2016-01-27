@@ -12,7 +12,7 @@
 // cmd = 'docker run -d -P --name ignition-api-server_1 -v /src/webapp:/opt/webapp training/webapp python app.py';
 
 var childProcess = require('child_process'),
-cmd              = 'docker run -d -P --name ignition-api-server_1 -v ~/keys:/src/keys ignitionio/api-server_1 node server';
+cmd              = 'docker run -d -P --name ignition-api-server_1 -v ~/keys:/src/v1/keys quay.io/ignitionio/api-server_1 node server';
 // cmd              = 'server.js';
 
 function runScript(scriptPath, callback) {
