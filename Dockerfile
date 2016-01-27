@@ -24,6 +24,8 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
   && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc
 
 
+VOLUME ["~/keys"]
+
 COPY ./src /src
 RUN cd /src/v1; npm install
 
@@ -35,5 +37,4 @@ ADD . /src
 EXPOSE 9091
 
 # Run app
-#CMD ["node", "/src/v1/server.js"]
 CMD ["node", "/src/v1/install.js"]
