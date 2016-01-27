@@ -4,7 +4,7 @@
  * Socket.io Connections
  */
 
-var   config        = require('./config.js'),
+var   config        = require('./keys/config.js'),
       models        = require('../models'),
       db            = require('./db'),
       token         = require('./token'),

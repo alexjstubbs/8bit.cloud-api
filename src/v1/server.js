@@ -9,7 +9,9 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-var config      = require('./config.js'),
+
+
+var config      = require('./keys/config.js'),
     models      = require('./models'),
     api         = require('./controllers'),
     sockets     = require('./controllers/sockets'),
