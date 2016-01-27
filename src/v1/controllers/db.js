@@ -4,16 +4,8 @@
  * RethinkDB Databases Connection.
  */
 
-var path = require('path');
-
-try {
-    var config = require('/home/alexander/keys/config.json');
-} catch(e) {
-    console.log('Set you your config.json file. File not found: ' + __dirname);
-    process.exit(1);
-}
-
-var r           = require('rethinkdb'),
+var config      = require('./config.js'),
+    r           = require('rethinkdb'),
     Promise     = require('bluebird');
 
 /* 

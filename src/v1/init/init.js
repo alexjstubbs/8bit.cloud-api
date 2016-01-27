@@ -4,19 +4,8 @@
  * Description: Set up ignition API server Datastore and Initial User Account.
  */
 
-var path = require('path');
-
-try {
-    var config = require('/home/alexander/keys/config.json');
-} catch(e) {
-    console.log('Set you your config.json file. File not found: ' + __dirname);
-    process.exit(1);
-}
-
-
-
-
-var models      = require('../models'),
+var config      = require('./config.js'),
+    models      = require('../models'),
     db          = require('../controllers/db'),
     log         = require('../controllers/logging'),
     databases   = require('./databases.json').databases,

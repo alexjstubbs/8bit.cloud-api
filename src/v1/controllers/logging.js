@@ -4,19 +4,9 @@
  * Ignition API Server Logging Configuration
  */
 
-var path = require('path');
 
-try {
-    var config = require('/home/alexander/keys/config.json');
-} catch(e) {
-    console.log('Set you your config.json file. File not found: ' + __dirname);
-    process.exit(1);
-}
-
-
-
-
-var winston    = require('winston'),
+var config     = require('./config.js'),
+    winston    = require('winston'),
     Papertrail = require('winston-papertrail').Papertrail;
 
 /*
