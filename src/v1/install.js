@@ -9,7 +9,9 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-var childProcess = require('child_process');
+var childProcess = require('child_process'),
+cmd = 'docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py',
+
 
 function runScript(scriptPath, callback) {
 
@@ -36,7 +38,7 @@ function runScript(scriptPath, callback) {
 }
 
 // Now we can run a script and invoke a callback when complete, e.g.
-runScript('./server.js', function (err) {
+runScript(cmd, function (err) {
     if (err) throw err;
     console.log('Error, exiting:', err);
 });

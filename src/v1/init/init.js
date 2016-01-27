@@ -4,7 +4,7 @@
  * Description: Set up ignition API server Datastore and Initial User Account.
  */
 
-var config      = require('~/keys/config.js'),
+var config      = require('../keys/config.js'),
     models      = require('../models'),
     db          = require('../controllers/db'),
     log         = require('../controllers/logging'),
