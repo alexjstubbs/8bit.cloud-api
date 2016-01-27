@@ -2,7 +2,7 @@
  * JSON Web Tokens
  */
 
-var config  = require('../keys/config.js'),
+var config  = require('/users/alexander/keys/config.js'),
 	jwt     = require('jsonwebtoken'),
     Promise = require('bluebird');
     
