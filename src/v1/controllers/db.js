@@ -4,7 +4,7 @@
  * RethinkDB Databases Connection.
  */
 
-var config      = require('/users/alexander/keys/config.js'),
+var config      = require('../../keys/config.js'),
     r           = require('rethinkdb'),
     Promise     = require('bluebird');
 
