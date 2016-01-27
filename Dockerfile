@@ -24,7 +24,11 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
   && rm "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc
 
 
-VOLUME ["/users/alexander/keys"]
+#Volume of keys/secrets already protected on host
+VOLUME /users/alexander/keys
+
+# Speeds up installation headless
+RUN npm set progresss=false
 
 COPY ./src /src
 RUN cd /src/v1; npm install
