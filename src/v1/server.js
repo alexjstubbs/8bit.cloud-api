@@ -9,18 +9,6 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-var child_process = require('child_process');
-var exec = child_process.exec;
-
-exec('ls -la', function(err,stout,stderr) {
-  if (err) {
-    console.log('Child process exited with error code', err.code);
-    return
-  }
-  console.log("out:", stdout);
-});
-
-
 var config      = require('../keys/config.js'),
     models      = require('./models'),
     api         = require('./controllers'),
