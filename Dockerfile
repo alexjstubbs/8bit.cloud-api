@@ -37,4 +37,4 @@ ADD . /src
 EXPOSE 9091
 
 # Run app
-CMD ["node", "/src/v1/install.js"]
+CMD ["node", "/src/v1/server.js"]
