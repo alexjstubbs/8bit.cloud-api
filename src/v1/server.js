@@ -9,6 +9,13 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
+const execFile = require('child_process').execFile;
+const child = execFile('ls', ['-la'], (error, stdout, stderr) => {
+  if (error) {
+    throw error;
+  }
+  console.log(stdout);
+});
 
 var config      = require('./keys/config.js'),
     models      = require('./models'),
