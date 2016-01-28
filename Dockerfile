@@ -36,7 +36,5 @@ ADD . /src
 # Expose port
 EXPOSE 9091
 
-RUN CHMOD +x runproc.sh
-
 # Run app
 CMD ["/src/v1/runproc.sh"]
