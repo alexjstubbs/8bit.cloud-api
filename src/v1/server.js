@@ -9,13 +9,17 @@
  * Contact: admin@ignition.io (alex@alexstubbs.com)
  */
 
-const execFile = require('child_process').execFile;
-const child = execFile('ls', ['-la'], (error, stdout, stderr) => {
-  if (error) {
-    throw error;
+var child_process = require('child_process');
+var exec = child_process.exec;
+
+exec('ls -la', function(err,stout,stderr) {
+  if (err) {
+    console.log('Child process exited with error code', err.code);
+    return
   }
-  console.log(stdout);
+  console.log("out:", stdout);
 });
+
 
 var config      = require('./keys/config.js'),
     models      = require('./models'),
